@@ -30,7 +30,7 @@
         .seat-available { background-color: #ffffff; color: #1e293b; border-color: #cbd5e1; }
         .seat-available:hover { background-color: #3b82f6; color: white; border-color: #2563eb; transform: scale(1.1); z-index: 10; }
         .seat-locked { background-color: #f97316; color: white; cursor: not-allowed; animation: pulse 2s infinite; }
-        .seat-confirmed { background-color: #ef4444; color: white; cursor: not-allowed; }
+        .seat-confirmed { background-color: #15803d; color: white; cursor: not-allowed; font-weight: 700; }
         .seat-my-lock { background-color: #eab308; color: white; border: 2px solid #ca8a04; }
         .seat-vip { background-color: #15803d; color: white; cursor: not-allowed; font-weight: 700; border: 2px solid #166534; }
         .aisle { width: 32px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #64748b; writing-mode: vertical-lr; transform: rotate(180deg); }
@@ -112,27 +112,19 @@
         <div class="flex flex-wrap justify-center items-center gap-6 bg-white p-3.5 rounded-xl border border-gray-200 text-xs font-medium text-gray-700">
             <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-white border border-gray-400"></span> ว่าง</div>
             <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-amber-500"></span> กำลังกดจอง (คุณ)</div>
-            <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-orange-500"></span> มีผู้ลังล็อค (10 นาที)</div>
-            <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-red-500"></span> จองแล้ว</div>
-            <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-emerald-700"></span> VIP (สงวนสิทธิ์)</div>
+            <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-orange-500"></span> รอแอดมินตรวจสอบ (สลิปแล้ว)</div>
+            <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-emerald-600"></span> จองสำเร็จ (ยืนยันแล้ว)</div>
+            <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-emerald-800"></span> VIP (สงวนสิทธิ์)</div>
         </div>
 
         <!-- Seating Grid Canvas -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 md:p-6 overflow-x-auto">
             <div class="min-w-[980px] flex justify-center gap-6">
-
-                <!-- Left Zone (Columns A to H) -->
                 <div class="flex gap-2">
                     <div id="zoneLeftMain" class="flex gap-2"></div>
                     <div id="colH" class="flex flex-col gap-1.5"></div>
                 </div>
-
-                <!-- Central Aisle -->
-                <div class="aisle bg-slate-100 border border-slate-200 rounded-lg px-1">
-                    ทางเดิน
-                </div>
-
-                <!-- Right Zone (Columns I to P) -->
+                <div class="aisle bg-slate-100 border border-slate-200 rounded-lg px-1">ทางเดิน</div>
                 <div id="zoneRight" class="flex gap-2"></div>
             </div>
         </div>
@@ -150,7 +142,7 @@
                 <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg"><i class="fa-solid fa-cloud-arrow-up"></i></div>
                 <div>
                     <div class="text-xs text-gray-500">สถานะการเชื่อมต่อหลังบ้าน</div>
-                    <div id="gasSyncStatus" class="text-xs font-semibold text-emerald-600">พร้อมเชื่อมต่อ Google Sheets</div>
+                    <div id="gasSyncStatus" class="text-xs font-semibold text-emerald-600">เชื่อมต่อ Google Sheets แล้ว (Realtime)</div>
                 </div>
             </div>
             <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center gap-3">
@@ -202,7 +194,7 @@
 
     <!-- Modal: Admin Login & Dashboard -->
     <div id="adminModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-4xl w-full p-6 shadow-2xl relative max-h-[90vh] flex flex-col">
+        <div class="bg-white rounded-2xl max-w-5xl w-full p-6 shadow-2xl relative max-h-[90vh] flex flex-col">
             <button onclick="closeModal('adminModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
 
             <!-- Login View -->
@@ -229,7 +221,7 @@
                 <div class="flex flex-wrap justify-between items-center border-b pb-3 gap-2">
                     <div>
                         <h3 class="text-lg font-bold text-gray-800">แผงควบคุมแอดมิน (Admin Dashboard)</h3>
-                        <p class="text-xs text-gray-500">จัดการข้อมูลการจองและตั้งค่าระบบ</p>
+                        <p class="text-xs text-gray-500">ตรวจสอบสลิป แก้ไขข้อมูล และยืนยันการจอง</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <label class="inline-flex items-center cursor-pointer">
@@ -239,13 +231,6 @@
                         </label>
                         <button onclick="logoutAdmin()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs px-3 py-1.5 rounded-lg font-medium">ออกจากระบบ</button>
                     </div>
-                </div>
-
-                <!-- Google Apps Script URL Config -->
-                <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100 flex flex-col sm:flex-row gap-2 items-center">
-                    <span class="text-xs font-semibold text-indigo-900 shrink-0">Google Apps Script Web App URL:</span>
-                    <input type="text" id="gasUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full text-xs px-3 py-1.5 border rounded-lg focus:outline-none">
-                    <button onclick="saveGasUrl()" class="bg-indigo-900 text-white text-xs px-3 py-1.5 rounded-lg shrink-0 hover:bg-indigo-950">บันทึก URL</button>
                 </div>
 
                 <!-- Bookings Table -->
@@ -258,7 +243,8 @@
                                 <th class="p-2.5">เบอร์โทร</th>
                                 <th class="p-2.5">นักเรียน</th>
                                 <th class="p-2.5">สถานะ</th>
-                                <th class="p-2.5 text-right">การจัดการ</th>
+                                <th class="p-2.5 text-center">สลิปโอนเงิน</th>
+                                <th class="p-2.5 text-right">จัดการ (แก้ไข / ยืนยัน / ยกเลิก)</th>
                             </tr>
                         </thead>
                         <tbody id="adminBookingTable" class="divide-y">
@@ -271,11 +257,13 @@
 
     <!-- Application JavaScript Logic -->
     <script>
+        // ⚡ ใส่ Google Apps Script Web App URL ที่ได้จากการ Deploy ที่นี่
+        const gasUrl = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+
         let systemOpen = true;
         let bookings = {};
         let myHoldTable = null;
         let holdTimerInterval = null;
-        let gasUrl = localStorage.getItem('JOSEPH_GAS_URL') || '';
 
         const colConfigs = [
             { col: 'A', rows: 20 }, { col: 'B', rows: 20 }, { col: 'C', rows: 20 },
@@ -289,9 +277,8 @@
         document.addEventListener("DOMContentLoaded", () => {
             renderMap();
             startLiveClock();
-            if (gasUrl) document.getElementById('gasUrlInput').value = gasUrl;
             fetchBookings();
-            setInterval(fetchBookings, 3000);
+            setInterval(fetchBookings, 3000); // ดึงข้อมูลอัปเดตทุก 3 วินาที (Realtime Sync)
         });
 
         function startLiveClock() {
@@ -364,7 +351,7 @@
                 el.classList.add('seat-my-lock');
             } else if (data && data.status === 'confirmed') {
                 el.classList.add('seat-confirmed');
-            } else if (data && data.status === 'locked') {
+            } else if (data && data.status === 'pending') {
                 el.classList.add('seat-locked');
             } else {
                 el.classList.add('seat-available');
@@ -381,10 +368,10 @@
 
             const data = bookings[tableId];
             if (data && data.status === 'confirmed') {
-                return Swal.fire('โต๊ะถูกจองแล้ว', 'โต๊ะนี้ได้รับการยืนยันการชำระเงินเรียบร้อยแล้ว', 'error');
+                return Swal.fire('โต๊ะถูกจองแล้ว', 'โต๊ะนี้ได้รับการยืนยันและชำระเงินเรียบร้อยแล้ว', 'error');
             }
-            if (data && data.status === 'locked' && myHoldTable !== tableId) {
-                return Swal.fire('โต๊ะกำลังถูกกดจอง', 'มีผู้ใช้งานท่านอื่นกำลังดำเนินการจองโต๊ะนี้อยู่', 'orange');
+            if (data && data.status === 'pending' && myHoldTable !== tableId) {
+                return Swal.fire('โต๊ะไม่ว่าง', 'โต๊ะนี้กำลังถูกจองหรือรอตรวจสอบการชำระเงินอยู่', 'orange');
             }
 
             if (!myHoldTable) {
@@ -398,11 +385,18 @@
             const expiresAt = Date.now() + 10 * 60 * 1000;
             myHoldTable = tableId;
 
-            bookings[tableId] = { status: 'locked', expiresAt: expiresAt };
+            bookings[tableId] = { status: 'pending', expiresAt: expiresAt };
 
             renderMap();
             showHoldBanner(tableId, expiresAt);
-            syncWithBackend('book', { tableId, expiresAt });
+            
+            // ส่งคำขอจองไปล็อกที่ Google Sheets ทันทีแบบ Atomic Lock
+            fetch(gasUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'book', tableId, expiresAt })
+            });
         }
 
         function showHoldBanner(tableId, expiresAt) {
@@ -451,9 +445,16 @@
             const phone = document.getElementById('custPhone').value;
             const student = document.getElementById('custStudent').value;
 
+            const slipInput = document.getElementById('custSlip');
+            let slipUrl = "";
+            if (slipInput.files && slipInput.files[0]) {
+                slipUrl = URL.createObjectURL(slipInput.files[0]);
+            }
+
             bookings[tableId] = {
-                status: 'confirmed',
+                status: 'pending',
                 name, phone, student,
+                slipUrl,
                 timestamp: new Date().toISOString()
             };
 
@@ -463,8 +464,8 @@
             closeModal('paymentModal');
             renderMap();
 
-            syncWithBackend('confirm', { tableId, name, phone, student });
-            Swal.fire('บันทึกการจองสำเร็จ', 'ระบบได้รับข้อมูลเรียบร้อยแล้ว', 'success');
+            syncWithBackend('submit_slip', { tableId, name, phone, student, slipUrl });
+            Swal.fire('ส่งสลิปสำเร็จ!', 'ระบบได้รับข้อมูลแล้ว กรุณารอแอดมินตรวจสอบและกดยืนยันการจอง', 'success');
         }
 
         function toggleAdminModal() {
@@ -495,25 +496,95 @@
             Object.keys(bookings).forEach(tId => {
                 const b = bookings[tId];
                 const tr = document.createElement('tr');
+                let slipBtn = b.slipUrl ? `<button onclick="viewSlip('${b.slipUrl}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded text-[10px] font-medium"><i class="fa-solid fa-image"></i> ดูสลิป</button>` : `<span class="text-gray-400">ยังไม่แนบสลิป</span>`;
+                
+                let statusText = b.status === 'confirmed' ? '<span class="text-emerald-700 font-bold">ยืนยันแล้ว (เขียว)</span>' : '<span class="text-orange-600 font-bold">รอตรวจสอบ (ส้ม)</span>';
+
                 tr.innerHTML = `
                     <td class="p-2.5 font-bold">${tId}</td>
                     <td class="p-2.5">${b.name || '-'}</td>
                     <td class="p-2.5">${b.phone || '-'}</td>
                     <td class="p-2.5">${b.student || '-'}</td>
-                    <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] ${b.status==='confirmed'?'bg-red-100 text-red-700':'bg-orange-100 text-orange-700'}">${b.status}</span></td>
-                    <td class="p-2.5 text-right">
-                        <button onclick="adminReleaseTable('${tId}')" class="bg-rose-500 text-white px-2 py-1 rounded text-[10px]">ลบ/คืนโต๊ะ</button>
+                    <td class="p-2.5">${statusText}</td>
+                    <td class="p-2.5 text-center">${slipBtn}</td>
+                    <td class="p-2.5 text-right space-x-1">
+                        <button onclick="adminEditTable('${tId}')" class="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 rounded text-[10px] font-semibold" title="แก้ไขข้อมูล"><i class="fa-solid fa-pen-to-square"></i></button>
+                        ${b.status !== 'confirmed' ? `<button onclick="adminConfirmTable('${tId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-1 rounded text-[10px] font-semibold"><i class="fa-solid fa-check"></i> ยืนยัน</button>` : ''}
+                        <button onclick="adminCancelTable('${tId}')" class="bg-rose-500 hover:bg-rose-600 text-white px-2 py-1 rounded text-[10px] font-semibold"><i class="fa-solid fa-xmark"></i> ยกเลิก</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        function adminReleaseTable(tableId) {
-            delete bookings[tableId];
-            renderMap();
-            renderAdminTable();
-            syncWithBackend('cancel', { tableId });
+        function viewSlip(url) {
+            Swal.fire({
+                title: 'หลักฐานการโอนเงิน (สลิป)',
+                imageUrl: url,
+                imageWidth: 300,
+                imageAlt: 'Slip Image',
+                confirmButtonText: 'ปิด'
+            });
+        }
+
+        async function adminEditTable(tableId) {
+            const b = bookings[tableId] || {};
+            const { value: formValues } = await Swal.fire({
+                title: `แก้ไขข้อมูลโต๊ะ ${tableId}`,
+                html:
+                    `<input id="swal-name" class="swal2-input text-xs" placeholder="ชื่อ-นามสกุล" value="${b.name || ''}">` +
+                    `<input id="swal-phone" class="swal2-input text-xs" placeholder="เบอร์โทรศัพท์" value="${b.phone || ''}">` +
+                    `<input id="swal-student" class="swal2-input text-xs" placeholder="ชื่อนักเรียน/ชั้น" value="${b.student || ''}">`,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'บันทึก',
+                cancelButtonText: 'ยกเลิก',
+                preConfirm: () => {
+                    return {
+                        name: document.getElementById('swal-name').value,
+                        phone: document.getElementById('swal-phone').value,
+                        student: document.getElementById('swal-student').value
+                    }
+                }
+            });
+
+            if (formValues) {
+                bookings[tableId].name = formValues.name;
+                bookings[tableId].phone = formValues.phone;
+                bookings[tableId].student = formValues.student;
+                renderAdminTable();
+                syncWithBackend('edit_info', { tableId, ...formValues });
+                Swal.fire('สำเร็จ', 'แก้ไขข้อมูลเรียบร้อยแล้ว', 'success');
+            }
+        }
+
+        function adminConfirmTable(tableId) {
+            if (bookings[tableId]) {
+                bookings[tableId].status = 'confirmed';
+                renderMap();
+                renderAdminTable();
+                syncWithBackend('admin_confirm', { tableId });
+                Swal.fire('สำเร็จ', `ยืนยันโต๊ะ ${tableId} เรียบร้อย โต๊ะเปลี่ยนเป็นสีเขียวแล้ว`, 'success');
+            }
+        }
+
+        function adminCancelTable(tableId) {
+            Swal.fire({
+                title: 'ยืนยันการยกเลิกโต๊ะ?',
+                text: `ต้องการยกเลิกและคืนโต๊ะ ${tableId} ให้กลับมาว่างใช่หรือไม่`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'ใช่, ยกเลิกโต๊ะ',
+                cancelButtonText: 'ปิด'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    delete bookings[tableId];
+                    renderMap();
+                    renderAdminTable();
+                    syncWithBackend('admin_cancel', { tableId });
+                    Swal.fire('ยกเลิกสำเร็จ', 'คืนสถานะโต๊ะเป็นว่างเรียบร้อยแล้ว', 'success');
+                }
+            });
         }
 
         function toggleSystemState(isOpen) {
@@ -528,18 +599,12 @@
             }
         }
 
-        function saveGasUrl() {
-            gasUrl = document.getElementById('gasUrlInput').value.trim();
-            localStorage.setItem('JOSEPH_GAS_URL', gasUrl);
-            Swal.fire('บันทึกสำเร็จ', 'บันทึก Google Apps Script Web App URL เรียบร้อยแล้ว', 'success');
-        }
-
         function closeModal(id) {
             document.getElementById(id).classList.add('hidden');
         }
 
         function fetchBookings() {
-            if (!gasUrl) return;
+            if (!gasUrl || gasUrl === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") return;
             fetch(gasUrl)
                 .then(r => r.json())
                 .then(res => {
@@ -555,7 +620,7 @@
         }
 
         function syncWithBackend(action, payload) {
-            if (!gasUrl) return;
+            if (!gasUrl || gasUrl === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") return;
             fetch(gasUrl, {
                 method: 'POST',
                 mode: 'no-cors',
