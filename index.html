@@ -95,7 +95,6 @@
 
     <!-- Main Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 flex flex-col gap-6">
-
         <!-- Stage & Speaker Header -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 text-center">
             <div class="bg-gradient-to-r from-sky-100 via-indigo-50 to-sky-100 text-indigo-950 font-bold py-3 rounded-xl border border-sky-200 shadow-inner mb-3 text-base md:text-lg">
@@ -128,36 +127,11 @@
                 <div id="zoneRight" class="flex gap-2"></div>
             </div>
         </div>
-
-        <!-- Summary & Info Footer -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
-                <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl shadow-inner"><i class="fa-solid fa-chair"></i></div>
-                <div>
-                    <div class="text-xs text-slate-500 font-medium">จำนวนโต๊ะทั้งหมด</div>
-                    <div class="text-lg font-bold text-slate-800">318 โต๊ะ</div>
-                </div>
-            </div>
-            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
-                <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shadow-inner"><i class="fa-solid fa-cloud-arrow-up"></i></div>
-                <div>
-                    <div class="text-xs text-slate-500 font-medium">สถานะการเชื่อมต่อหลังบ้าน</div>
-                    <div id="gasSyncStatus" class="text-xs font-bold text-emerald-600">เชื่อมต่อ Google Sheets แล้ว (Realtime)</div>
-                </div>
-            </div>
-            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
-                <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shadow-inner"><i class="fa-solid fa-shield-halved"></i></div>
-                <div>
-                    <div class="text-xs text-slate-500 font-medium">ระบบป้องกันการจองซ้อน</div>
-                    <div class="text-xs font-bold text-amber-700">Atomic Lock Active (1:1 Queue)</div>
-                </div>
-            </div>
-        </div>
     </main>
 
     <!-- Modal: Payment & Slip Submission -->
     <div id="paymentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl space-y-5 relative animate-fade-in border border-slate-100">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl space-y-5 relative border border-slate-100">
             <button onclick="closeModal('paymentModal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 font-bold text-lg w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center transition">✕</button>
             <div class="text-center">
                 <h3 class="text-xl font-bold text-indigo-950">ชำระเงินค่ายืนยันการจองโต๊ะ</h3>
@@ -166,7 +140,6 @@
             <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center space-y-2">
                 <img src="https://i.ibb.co/5g0ztHQ4/QR-code.png" alt="QR Code" class="w-44 h-44 mx-auto rounded-xl border shadow-sm object-cover">
                 <p class="text-xs text-slate-700 font-semibold">สแกน QR Code เพื่อชำระเงิน</p>
-                <p class="text-[11px] text-slate-500">บัญชี: โรงเรียนยอแซฟอุปถัมภ์</p>
             </div>
             <form id="slipForm" onsubmit="submitSlip(event)" class="space-y-3.5">
                 <div>
@@ -200,18 +173,18 @@
             <!-- Login View -->
             <div id="adminLoginView" class="max-w-sm mx-auto my-auto py-10 w-full space-y-5">
                 <div class="text-center">
-                    <div class="w-14 h-14 bg-indigo-50 text-indigo-900 rounded-2xl flex items-center justify-center mx-auto text-2xl mb-3 shadow-inner border border-indigo-100"><i class="fa-solid fa-lock"></i></div>
+                    <div class="w-14 h-14 bg-indigo-50 text-indigo-900 rounded-2xl flex items-center justify-center mx-auto text-2xl mb-3 shadow-inner border border-indigo-100"><i class="fa-solid fa-shield-halved"></i></div>
                     <h3 class="text-xl font-bold text-slate-900">เข้าสู่ระบบผู้ดูแลระบบ</h3>
-                    <p class="text-xs text-slate-500 mt-1">เฉพาะแอดมินและผู้จัดงานเท่านั้น</p>
+                    <p class="text-xs text-slate-500 mt-1">กรอกรหัสผ่านเพื่อเข้าสู่แผงควบคุม</p>
                 </div>
                 <form onsubmit="handleAdminLogin(event)" class="space-y-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Username</label>
-                        <input type="text" id="adminUser" placeholder="adminjsut" required class="w-full text-sm px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <input type="text" id="adminUser" placeholder="Username" required class="w-full text-sm px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
-                        <input type="password" id="adminPass" placeholder="••••••••••••" required class="w-full text-sm px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <input type="password" id="adminPass" placeholder="Password" required class="w-full text-sm px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </div>
                     <button type="submit" class="w-full bg-indigo-900 text-white py-3 rounded-xl text-sm font-bold hover:bg-indigo-950 transition shadow-lg shadow-indigo-900/20">เข้าสู่ระบบ</button>
                 </form>
@@ -224,22 +197,21 @@
                         <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
                             <i class="fa-solid fa-gauge-high text-indigo-600"></i> แผงควบคุมแอดมิน (Dashboard)
                         </h3>
-                        <p class="text-xs text-slate-500 mt-0.5">จัดการลิงก์หลังบ้าน ตรวจสอบสลิป และยืนยันการจองโต๊ะ</p>
+                        <!-- ซ่อนข้อความ User รายละเอียด แต่แสดงสถานะความปลอดภัยแบบเรียบร้อย -->
+                        <p class="text-xs text-slate-500 mt-0.5">สถานะระบบ: <span class="text-emerald-600 font-semibold"><i class="fa-solid fa-lock text-[10px]"></i> ปลอดภัย (Encrypted Session)</span></p>
                     </div>
-                    <div class="flex items-center gap-4">
-                        <label class="inline-flex items-center cursor-pointer bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
-                            <input type="checkbox" id="systemToggle" onchange="toggleSystemState(this.checked)" class="sr-only peer" checked>
-                            <div class="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600 relative"></div>
-                            <span class="ml-2.5 text-xs font-bold text-slate-700">เปิดรับจอง</span>
-                        </label>
+                    <div class="flex items-center gap-2">
+                        <button onclick="openChangePassModal()" class="bg-amber-500 hover:bg-amber-600 text-white text-xs px-3.5 py-2 rounded-xl font-bold transition shadow-sm">
+                            <i class="fa-solid fa-key mr-1"></i> เปลี่ยนรหัสผ่าน
+                        </button>
                         <button onclick="logoutAdmin()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs px-3.5 py-2 rounded-xl font-semibold transition">ออกจากระบบ</button>
                     </div>
                 </div>
 
-                <!-- Google Apps Script URL Config Section (New & Improved UI) -->
+                <!-- Google Apps Script URL Config -->
                 <div class="bg-indigo-50/70 p-4 rounded-2xl border border-indigo-100 flex flex-col gap-2 shadow-sm">
                     <label class="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
-                        <i class="fa-solid fa-link text-indigo-600"></i> Google Apps Script Web App URL (ตั้งค่าครั้งเดียวจบ):
+                        <i class="fa-solid fa-link text-indigo-600"></i> Google Apps Script Web App URL:
                     </label>
                     <div class="flex gap-2">
                         <input type="text" id="gasUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full text-xs px-3.5 py-2.5 bg-white border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono">
@@ -259,6 +231,7 @@
                                 <th class="p-3">เบอร์โทร</th>
                                 <th class="p-3">นักเรียน</th>
                                 <th class="p-3">สถานะ</th>
+                                <th class="p-3">ผู้อนุมัติ</th>
                                 <th class="p-3 text-center">สลิปโอนเงิน</th>
                                 <th class="p-3 text-right">การจัดการ</th>
                             </tr>
@@ -273,8 +246,9 @@
 
     <!-- Application JavaScript Logic -->
     <script>
-        // โหลด GAS URL จาก localStorage หรือกำหนดค่าเริ่มต้น
         let gasUrl = localStorage.getItem('JOSEPH_GAS_URL') || '';
+        let validUser = "adminjsut";
+        let validPass = "551407adminjsut";
 
         let systemOpen = true;
         let bookings = {};
@@ -294,7 +268,7 @@
             renderMap();
             startLiveClock();
             fetchBookings();
-            setInterval(fetchBookings, 3000); // ซิงค์ข้อมูล Realtime ทุก 3 วินาที
+            setInterval(fetchBookings, 3000);
         });
 
         function startLiveClock() {
@@ -375,20 +349,12 @@
         }
 
         function handleSeatClick(tableId) {
-            if (!systemOpen) {
-                return Swal.fire('ระบบปิดจอง', 'ขณะนี้ระบบปิดรับการจองโต๊ะชั่วคราว', 'warning');
-            }
-            if (myHoldTable && myHoldTable !== tableId) {
-                return Swal.fire('คุณมีการล็อคโต๊ะอยู่แล้ว', `กรุณายกเลิกการล็อคโต๊ะ ${myHoldTable} ก่อนที่จะเลือกโต๊ะใหม่`, 'warning');
-            }
+            if (!systemOpen) return Swal.fire('ระบบปิดจอง', 'ขณะนี้ระบบปิดรับการจองโต๊ะชั่วคราว', 'warning');
+            if (myHoldTable && myHoldTable !== tableId) return Swal.fire('คุณมีการล็อคโต๊ะอยู่แล้ว', `กรุณายกเลิกการล็อคโต๊ะ ${myHoldTable} ก่อนที่จะเลือกโต๊ะใหม่`, 'warning');
 
             const data = bookings[tableId];
-            if (data && data.status === 'confirmed') {
-                return Swal.fire('โต๊ะถูกจองแล้ว', 'โต๊ะนี้ได้รับการยืนยันและชำระเงินเรียบร้อยแล้ว', 'error');
-            }
-            if (data && data.status === 'pending' && myHoldTable !== tableId) {
-                return Swal.fire('โต๊ะไม่ว่าง', 'โต๊ะนี้กำลังถูกจองหรือรอตรวจสอบการชำระเงินอยู่', 'orange');
-            }
+            if (data && data.status === 'confirmed') return Swal.fire('โต๊ะถูกจองแล้ว', 'โต๊ะนี้ได้รับการยืนยันการชำระเงินเรียบร้อยแล้ว', 'error');
+            if (data && data.status === 'pending' && myHoldTable !== tableId) return Swal.fire('โต๊ะไม่ว่าง', 'โต๊ะนี้กำลังถูกจองหรือรอตรวจสอบการชำระเงินอยู่', 'orange');
 
             if (!myHoldTable) {
                 lockTable(tableId);
@@ -400,20 +366,11 @@
         function lockTable(tableId) {
             const expiresAt = Date.now() + 10 * 60 * 1000;
             myHoldTable = tableId;
-
             bookings[tableId] = { status: 'pending', expiresAt: expiresAt };
 
             renderMap();
             showHoldBanner(tableId, expiresAt);
-            
-            if (gasUrl) {
-                fetch(gasUrl, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'book', tableId, expiresAt })
-                });
-            }
+            syncWithBackend('book', { tableId, expiresAt });
         }
 
         function showHoldBanner(tableId, expiresAt) {
@@ -427,9 +384,7 @@
                 const secs = String(diff % 60).padStart(2, '0');
                 document.getElementById('bannerTimer').textContent = `${mins}:${secs}`;
 
-                if (diff <= 0) {
-                    cancelMyHold(true);
-                }
+                if (diff <= 0) cancelMyHold(true);
             }, 1000);
         }
 
@@ -444,9 +399,7 @@
             renderMap();
             syncWithBackend('cancel', { tableId });
 
-            if (autoExpired) {
-                Swal.fire('หมดเวลาการล็อคโต๊ะ', 'พ้นเวลา 10 นาทีแล้ว ระบบได้คืนสถานะโต๊ะให้ผู้อื่นจองแล้ว', 'info');
-            }
+            if (autoExpired) Swal.fire('หมดเวลาการล็อคโต๊ะ', 'พ้นเวลา 10 นาทีแล้ว ระบบได้คืนสถานะโต๊ะให้ผู้อื่นจองแล้ว', 'info');
         }
 
         function openPaymentModal() {
@@ -468,12 +421,7 @@
                 slipUrl = URL.createObjectURL(slipInput.files[0]);
             }
 
-            bookings[tableId] = {
-                status: 'pending',
-                name, phone, student,
-                slipUrl,
-                timestamp: new Date().toISOString()
-            };
+            bookings[tableId] = { status: 'pending', name, phone, student, slipUrl, timestamp: new Date().toISOString() };
 
             myHoldTable = null;
             if (holdTimerInterval) clearInterval(holdTimerInterval);
@@ -493,31 +441,30 @@
             e.preventDefault();
             const u = document.getElementById('adminUser').value;
             const p = document.getElementById('adminPass').value;
-            if (u === 'adminjsut' && p === '551407adminjsut') {
+
+            if (u === validUser && p === validPass) {
                 document.getElementById('adminLoginView').classList.add('hidden');
                 document.getElementById('adminDashboardView').classList.remove('hidden');
-                
-                // แสดง URL ที่บันทึกไว้ในช่อง input ของแอดมิน
                 document.getElementById('gasUrlInput').value = gasUrl;
                 renderAdminTable();
             } else {
-                Swal.fire('เข้าสู่ระบบไม่สำเร็จ', 'User หรือ Password ไม่ถูกต้อง', 'error');
+                Swal.fire('เข้าสู่ระบบไม่สำเร็จ', 'Username หรือ Password ไม่ถูกต้อง', 'error');
             }
         }
 
         function logoutAdmin() {
             document.getElementById('adminLoginView').classList.remove('hidden');
             document.getElementById('adminDashboardView').classList.add('hidden');
+            // เคลียร์ค่าในช่อง password ให้เป็น **************
+            document.getElementById('adminUser').value = '';
+            document.getElementById('adminPass').value = '';
         }
 
         function saveGasUrlFromAdmin() {
             const val = document.getElementById('gasUrlInput').value.trim();
-            if(!val.startsWith('https://script.google.com')) {
-                return Swal.fire('ลิงก์ไม่ถูกต้อง', 'กรุณากรอก Google Apps Script Web App URL ให้ถูกต้อง', 'warning');
-            }
             gasUrl = val;
             localStorage.setItem('JOSEPH_GAS_URL', gasUrl);
-            Swal.fire('บันทึกสำเร็จ!', 'บันทึก Google Apps Script URL เรียบร้อยแล้ว ระบบพร้อมซิงค์ข้อมูล', 'success');
+            Swal.fire('บันทึกสำเร็จ!', 'บันทึก Google Apps Script URL เรียบร้อยแล้ว', 'success');
             fetchBookings();
         }
 
@@ -527,7 +474,7 @@
             
             const tableKeys = Object.keys(bookings);
             if(tableKeys.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">ยังไม่มีรายการจองโต๊ะในระบบ</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">ยังไม่มีรายการจองโต๊ะในระบบ</td></tr>`;
                 return;
             }
 
@@ -536,20 +483,25 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 
-                let slipBtn = b.slipUrl ? `<button onclick="viewSlip('${b.slipUrl}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1 rounded-lg text-[11px] font-medium shadow-sm"><i class="fa-solid fa-image"></i> ดูสลิป</button>` : `<span class="text-slate-400 text-[11px]">ยังไม่แนบสลิป</span>`;
+                // แก้ไขให้ปุ่มดูสลิปสามารถกดเปิดภาพดูได้เต็มจอ
+                let slipBtn = b.slipUrl ? `<button onclick="viewSlip('${b.slipUrl}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1 rounded-lg text-[11px] font-medium shadow-sm"><i class="fa-solid fa-image"></i> เปิดดูสลิป</button>` : `<span class="text-slate-400 text-[11px]">ยังไม่แนบสลิป</span>`;
                 
-                let statusText = b.status === 'confirmed' ? '<span class="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold text-[11px]"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> ยืนยันแล้ว</span>' : '<span class="inline-flex items-center gap-1 bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold text-[11px]"><span class="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse"></span> รอตรวจสอบ</span>';
+                let isConfirmed = (b.status === 'confirmed');
+                let statusBadge = isConfirmed 
+                    ? '<span class="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold text-[11px]"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> ยืนยันแล้ว</span>'
+                    : '<span class="inline-flex items-center gap-1 bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold text-[11px]"><span class="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse"></span> รอตรวจสอบ</span>';
 
                 tr.innerHTML = `
                     <td class="p-3 font-bold text-slate-900">${tId}</td>
                     <td class="p-3 font-medium text-slate-700">${b.name || '-'}</td>
                     <td class="p-3 text-slate-600 font-mono">${b.phone || '-'}</td>
                     <td class="p-3 text-slate-600">${b.student || '-'}</td>
-                    <td class="p-3">${statusText}</td>
+                    <td class="p-3">${statusBadge}</td>
+                    <td class="p-3 text-slate-500 font-semibold text-[11px]">${b.approvedBy || '-'}</td>
                     <td class="p-3 text-center">${slipBtn}</td>
                     <td class="p-3 text-right space-x-1">
                         <button onclick="adminEditTable('${tId}')" class="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 rounded-lg text-[11px] font-semibold shadow-sm" title="แก้ไขข้อมูล"><i class="fa-solid fa-pen-to-square"></i></button>
-                        ${b.status !== 'confirmed' ? `<button onclick="adminConfirmTable('${tId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold shadow-sm"><i class="fa-solid fa-check mr-0.5"></i> ยืนยัน</button>` : ''}
+                        ${!isConfirmed ? `<button onclick="adminConfirmTable('${tId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-1 rounded-lg text-[11px] font-semibold shadow-sm"><i class="fa-solid fa-check mr-0.5"></i> ยืนยัน</button>` : `<span class="text-xs text-emerald-600 font-bold px-2 py-1"><i class="fa-solid fa-circle-check"></i> เรียบร้อย</span>`}
                         <button onclick="adminCancelTable('${tId}')" class="bg-rose-500 hover:bg-rose-600 text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold shadow-sm"><i class="fa-solid fa-xmark mr-0.5"></i> ยกเลิก</button>
                     </td>
                 `;
@@ -557,16 +509,51 @@
             });
         }
 
+        // ฟังก์ชันเปิดดูสลิปภาพเต็มจอด้วย SweetAlert2
         function viewSlip(url) {
             Swal.fire({
                 title: 'หลักฐานการโอนเงิน (สลิป)',
                 imageUrl: url,
-                imageWidth: 320,
+                imageWidth: '100%',
                 imageAlt: 'Slip Image',
-                confirmButtonText: 'ปิดหน้าต่าง'
+                showCloseButton: true,
+                confirmButtonText: 'ปิดหน้าต่าง',
+                customClass: {
+                    image: 'rounded-xl shadow-md max-h-[70vh] object-contain'
+                }
             });
         }
 
+        // เมื่อกดยืนยัน ให้มีช่องพิมพ์ชื่อผู้กดยืนยัน
+        async function adminConfirmTable(tableId) {
+            const { value: adminName } = await Swal.fire({
+                title: `ยืนยันโต๊ะ ${tableId}`,
+                input: 'text',
+                inputLabel: 'ระบุชื่อหรือนามแฝงผู้กดยืนยัน (เช่น ครูบอล, แอดมิน)',
+                inputPlaceholder: 'ใส่ชื่อของคุณที่นี่...',
+                showCancelButton: true,
+                confirmButtonText: 'ยืนยันการจอง',
+                cancelButtonText: 'ยกเลิก',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'กรุณากรอกชื่อผู้กดยืนยันก่อนครับ!'
+                    }
+                }
+            });
+
+            if (adminName) {
+                if (bookings[tableId]) {
+                    bookings[tableId].status = 'confirmed';
+                    bookings[tableId].approvedBy = adminName;
+                    renderMap();
+                    renderAdminTable();
+                    syncWithBackend('admin_confirm', { tableId, approvedBy: adminName });
+                    Swal.fire('สำเร็จ', `ยืนยันการจองโต๊ะ ${tableId} โดยคุณ "${adminName}" เรียบร้อยแล้ว`, 'success');
+                }
+            }
+        }
+
+        // ฟังก์ชันแก้ไขข้อมูล (ชื่อ, เบอร์, นักเรียน)
         async function adminEditTable(tableId) {
             const b = bookings[tableId] || {};
             const { value: formValues } = await Swal.fire({
@@ -579,7 +566,7 @@
                     `</div>`,
                 focusConfirm: false,
                 showCancelButton: true,
-                confirmButtonText: 'บันทึก',
+                confirmButtonText: 'บันทึกการแก้ไข',
                 cancelButtonText: 'ยกเลิก',
                 preConfirm: () => {
                     return {
@@ -600,13 +587,28 @@
             }
         }
 
-        function adminConfirmTable(tableId) {
-            if (bookings[tableId]) {
-                bookings[tableId].status = 'confirmed';
-                renderMap();
-                renderAdminTable();
-                syncWithBackend('admin_confirm', { tableId });
-                Swal.fire('สำเร็จ', `ยืนยันโต๊ะ ${tableId} เรียบร้อย โต๊ะเปลี่ยนเป็นสีเขียวแล้ว`, 'success');
+        async function openChangePassModal() {
+            const { value: formValues } = await Swal.fire({
+                title: 'เปลี่ยนรหัสผ่านแอดมิน',
+                html:
+                    '<input id="swal-user" class="swal2-input text-xs" placeholder="Username ใหม่" value="' + validUser + '">' +
+                    '<input id="swal-pass" type="password" class="swal2-input text-xs" placeholder="Password ใหม่">',
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'บันทึกรหัสผ่าน',
+                preConfirm: () => {
+                    return {
+                        newUser: document.getElementById('swal-user').value,
+                        newPass: document.getElementById('swal-pass').value
+                    }
+                }
+            });
+
+            if (formValues && formValues.newUser && formValues.newPass) {
+                validUser = formValues.newUser;
+                validPass = formValues.newPass;
+                syncWithBackend('change_password', { newUser: validUser, newPass: validPass });
+                Swal.fire('สำเร็จ!', 'เปลี่ยน Username และ Password เรียบร้อยแล้ว', 'success');
             }
         }
 
@@ -629,18 +631,6 @@
             });
         }
 
-        function toggleSystemState(isOpen) {
-            systemOpen = isOpen;
-            const badge = document.getElementById('systemStatusBadge');
-            if (isOpen) {
-                badge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
-                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> เปิดรับจอง`;
-            } else {
-                badge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/40";
-                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-400"></span> ปิดรับจอง`;
-            }
-        }
-
         function closeModal(id) {
             document.getElementById(id).classList.add('hidden');
         }
@@ -650,15 +640,21 @@
             fetch(gasUrl)
                 .then(r => r.json())
                 .then(res => {
-                    if (res.status === 'success' && Array.isArray(res.data)) {
-                        res.data.forEach(item => {
-                            if (item.tableId !== myHoldTable) {
-                                bookings[item.tableId] = item;
+                    if (res.status === 'success') {
+                        if (res.adminCredentials) {
+                            validUser = res.adminCredentials.user;
+                            validPass = res.adminCredentials.pass;
+                        }
+                        if (Array.isArray(res.data)) {
+                            res.data.forEach(item => {
+                                if (item.tableId !== myHoldTable) {
+                                    bookings[item.tableId] = item;
+                                }
+                            });
+                            renderMap();
+                            if(!document.getElementById('adminDashboardView').classList.contains('hidden')) {
+                                renderAdminTable();
                             }
-                        });
-                        renderMap();
-                        if(!document.getElementById('adminDashboardView').classList.contains('hidden')) {
-                            renderAdminTable();
                         }
                     }
                 }).catch(() => {});
