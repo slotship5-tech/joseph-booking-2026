@@ -29,10 +29,10 @@
         }
         .seat-available { background-color: #ffffff; color: #1e293b; border-color: #cbd5e1; }
         .seat-available:hover { background-color: #3b82f6; color: white; border-color: #2563eb; transform: scale(1.1); z-index: 10; }
-        .seat-locked { background-color: #f97316; color: white; cursor: not-allowed; animation: pulse 2s infinite; }
+        .seat-locked { background-color: #f97316; color: white; cursor: pointer; font-weight: 700; border-color: #ea580c; }
         .seat-confirmed { background-color: #15803d; color: white; cursor: pointer; font-weight: 700; }
         .seat-confirmed:hover { transform: scale(1.1); z-index: 10; background-color: #166534; }
-        .seat-my-lock { background-color: #eab308; color: white; border: 2px solid #ca8a04; }
+        .seat-my-lock { background-color: #f97316; color: white; border: 2px solid #c2410c; animation: pulse 1.5s infinite; }
         .seat-vip { background-color: #15803d; color: white; cursor: not-allowed; font-weight: 700; border: 2px solid #166534; }
         .aisle { width: 32px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #64748b; writing-mode: vertical-lr; transform: rotate(180deg); }
     </style>
@@ -48,7 +48,7 @@
                 </div>
                 <div>
                     <h1 class="text-lg md:text-xl font-bold tracking-tight">Joseph's Family Night 2026</h1>
-                    <p class="text-xs text-indigo-300">ระบบจองโต๊ะงานประจำปี - โรงเรียนยอแซฟอุปถัมภ์</p>
+                    <p class="text-xs text-indigo-300">ระบบจองโต๊ะงานประจำปี - โรงเรียนยอแซฟอุปถัมภ์อู่ทอง</p>
                 </div>
             </div>
 
@@ -86,7 +86,7 @@
                     <button onclick="openPaymentModal()" class="bg-indigo-900 hover:bg-indigo-950 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow transition">
                         แจ้งชำระเงินทันที
                     </button>
-                    <button onclick="cancelMyHold()" class="bg-rose-600 hover:bg-rose-700 text-white w-7 h-7 rounded-lg flex items-center justify-center font-bold text-sm shadow transition" title="ยกเลิกการล็อคโต๊ะเพื่อเลือกโต๊ะใหม่">
+                    <button onclick="cancelMyHold()" class="bg-rose-600 hover:bg-rose-700 text-white w-7 h-7 rounded-lg flex items-center justify-center font-bold text-sm shadow transition" title="ยกเลิกการล็อคโต๊ะ">
                         ✕
                     </button>
                 </div>
@@ -96,6 +96,32 @@
 
     <!-- Main Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 flex flex-col gap-6">
+
+        <!-- สรุปจำนวนโต๊ะและข้อมูลการติดต่อโรงเรียน -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl shrink-0 border border-indigo-100"><i class="fa-solid fa-chair"></i></div>
+                <div>
+                    <div class="text-xs text-slate-500 font-medium">จำนวนโต๊ะทั้งหมด</div>
+                    <div class="text-lg font-bold text-slate-800">318 <span class="text-xs font-normal text-slate-500">โต๊ะ</span></div>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0 border border-emerald-100"><i class="fa-solid fa-circle-check"></i></div>
+                <div>
+                    <div class="text-xs text-slate-500 font-medium">จำนวนโต๊ะว่างคงเหลือ</div>
+                    <div id="availableCount" class="text-lg font-bold text-emerald-600">318 <span class="text-xs font-normal text-slate-500">โต๊ะ</span></div>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shrink-0 border border-amber-100"><i class="fa-solid fa-phone-volume"></i></div>
+                <div>
+                    <div class="text-xs text-slate-500 font-medium">สอบถามข้อมูลเพิ่มเติม</div>
+                    <div class="text-sm font-bold text-slate-800">035-551407 <span class="text-[11px] font-normal text-slate-500 block">โรงเรียนยอแซฟอุปถัมภ์อู่ทอง</span></div>
+                </div>
+            </div>
+        </div>
+
         <!-- Stage & Speaker Header -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 text-center">
             <div class="bg-gradient-to-r from-sky-100 via-indigo-50 to-sky-100 text-indigo-950 font-bold py-3 rounded-xl border border-sky-200 shadow-inner mb-3 text-base md:text-lg">
@@ -111,9 +137,8 @@
         <!-- Seating Map Legend -->
         <div class="flex flex-wrap justify-center items-center gap-4 md:gap-6 bg-white p-4 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 shadow-sm">
             <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-white border border-slate-400 shadow-sm"></span> ว่าง</div>
-            <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-amber-500 shadow-sm"></span> กำลังกดจอง (คุณ)</div>
-            <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-orange-500 shadow-sm"></span> รอแอดมินตรวจสอบ</div>
-            <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-emerald-600 shadow-sm"></span> จองสำเร็จ (คลิกดูรายละเอียดได้)</div>
+            <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-amber-500 shadow-sm"></span> กำลังกดจอง / รอแอดมินอนุมัติ (สีส้ม)</div>
+            <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-emerald-600 shadow-sm"></span> จองสำเร็จ (อนุมัติแล้ว)</div>
             <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-emerald-800 shadow-sm"></span> VIP (สงวนสิทธิ์)</div>
         </div>
 
@@ -141,6 +166,7 @@
             <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center space-y-2">
                 <img src="https://i.ibb.co/5g0ztHQ4/QR-code.png" alt="QR Code" class="w-44 h-44 mx-auto rounded-xl border shadow-sm object-cover">
                 <p class="text-xs text-slate-700 font-semibold">สแกน QR Code เพื่อชำระเงิน</p>
+                <p class="text-[11px] text-slate-500">โรงเรียนยอแซฟอุปถัมภ์อู่ทอง (โทร. 035-551407)</p>
             </div>
             <form id="slipForm" onsubmit="submitSlip(event)" class="space-y-3.5">
                 <div>
@@ -159,14 +185,14 @@
                     <label class="block text-xs font-semibold text-slate-700 mb-1">แนบสลิปการโอนเงิน *</label>
                     <input type="file" id="custSlip" accept="image/*" required class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer border border-slate-200 rounded-xl p-1 bg-slate-50">
                 </div>
-                <button type="submit" class="w-full bg-indigo-900 hover:bg-indigo-950 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-indigo-900/20 mt-2">
-                    ยืนยันส่งหลักฐานการโอนเงิน
+                <button type="submit" id="submitBtn" class="w-full bg-indigo-900 hover:bg-indigo-950 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-indigo-900/20 mt-2 flex justify-center items-center gap-2">
+                    <span>ยืนยันส่งหลักฐานการโอนเงิน</span>
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- Modal: Admin Login & Dashboard (ปรับปรุง UI สวยงาม + มีระบบเปิดปิดจอง) -->
+    <!-- Modal: Admin Login & Dashboard -->
     <div id="adminModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-5xl w-full p-6 md:p-8 shadow-2xl relative max-h-[92vh] flex flex-col border border-slate-100">
             <button onclick="closeModal('adminModal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 font-bold text-lg w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center transition">✕</button>
@@ -203,7 +229,6 @@
                         <p class="text-xs text-slate-500 mt-0.5">สถานะระบบ: <span class="text-emerald-600 font-semibold"><i class="fa-solid fa-shield-check text-[10px]"></i> ปลอดภัย (Encrypted Session)</span></p>
                     </div>
                     <div class="flex items-center gap-3">
-                        <!-- สวิตช์เปิด-ปิดระบบการจอง -->
                         <div class="flex items-center gap-2 bg-slate-100 px-3.5 py-1.5 rounded-2xl border border-slate-200">
                             <i id="toggleIcon" class="fa-solid fa-door-open text-emerald-600"></i>
                             <span class="text-xs font-bold text-slate-700" id="toggleLabel">เปิดการจอง</span>
@@ -328,6 +353,8 @@
                     zoneRight.appendChild(container);
                 }
             });
+
+            updateAvailableCount();
         }
 
         function createSeatElement(tableId, isVip = false) {
@@ -352,20 +379,29 @@
             el.className = 'seat';
 
             if (myHoldTable === tableId) {
-                el.classList.add('seat-my-lock');
+                el.classList.add('seat-my-lock'); // กระพริบสีส้ม
             } else if (data && data.status === 'confirmed') {
-                el.classList.add('seat-confirmed');
+                el.classList.add('seat-confirmed'); // สีเขียว
             } else if (data && data.status === 'pending') {
-                el.classList.add('seat-locked');
+                el.classList.add('seat-locked'); // สีส้มค้าง
             } else {
-                el.classList.add('seat-available');
+                el.classList.add('seat-available'); // สีขาว
             }
+        }
+
+        function updateAvailableCount() {
+            const total = 318;
+            const booked = Object.keys(bookings).filter(k => bookings[k] && (bookings[k].status === 'confirmed' || bookings[k].status === 'pending')).length;
+            const myHold = myHoldTable && !bookings[myHoldTable] ? 1 : 0;
+            const avail = Math.max(0, total - booked - myHold);
+            
+            const countEl = document.getElementById('availableCount');
+            if (countEl) countEl.innerHTML = `${avail} <span class="text-xs font-normal text-slate-500">โต๊ะ</span>`;
         }
 
         function handleSeatClick(tableId) {
             const data = bookings[tableId];
 
-            // 1. โต๊ะสีเขียว (ยืนยันแล้ว) กดดูรายละเอียดเล็กๆ
             if (data && data.status === 'confirmed') {
                 return Swal.fire({
                     title: `<span class="text-base text-emerald-800 font-bold"><i class="fa-solid fa-chair text-emerald-600 mr-1"></i> โต๊ะ ${tableId}</span>`,
@@ -391,41 +427,42 @@
                     `,
                     confirmButtonText: 'ปิดหน้าต่าง',
                     confirmButtonColor: '#059669',
-                    customClass: {
-                        popup: 'rounded-3xl border border-slate-100 shadow-xl max-w-xs'
-                    }
+                    customClass: { popup: 'rounded-3xl border border-slate-100 shadow-xl max-w-xs' }
                 });
             }
 
-            // 2. ถ้าปิดการจอง
             if (!systemOpen) return Swal.fire('ระบบปิดรับจอง', 'ขณะนี้ระบบปิดรับการจองโต๊ะชั่วคราว', 'warning');
 
-            // 3. โต๊ะสีส้ม (กำลังจอง)
-            if (data && data.status === 'pending' && myHoldTable !== tableId) {
+            if (data && data.status === 'pending') {
+                if (myHoldTable === tableId) {
+                    openPaymentModal();
+                    return;
+                }
                 return Swal.fire({
                     icon: 'warning',
                     title: `โต๊ะ ${tableId} ไม่ว่าง`,
-                    text: 'โต๊ะนี้กำลังมีผู้กดจองหรือรอตรวจสอบการชำระเงินอยู่ครับ',
+                    text: 'โต๊ะนี้กำลังมีผู้จองและรอแอดมินตรวจสอบชำระเงินอยู่ครับ',
                     confirmButtonText: 'เข้าใจแล้ว',
                     confirmButtonColor: '#f97316'
                 });
             }
 
             if (myHoldTable && myHoldTable !== tableId) {
-                return Swal.fire('คุณมีการล็อคโต๊ะอยู่แล้ว', `กรุณายกเลิกการล็อคโต๊ะ ${myHoldTable} ก่อนที่จะเลือกโต๊ะใหม่`, 'warning');
+                return Swal.fire(
+                    'คุณมีการล็อคโต๊ะอยู่แล้ว', 
+                    `คุณกำลังเลือกโต๊ะ <b>${myHoldTable}</b> อยู่ <br>กรุณากดยกเลิก (กากบาท ✕ แบนเนอร์ด้านบน) ก่อนเลือกโต๊ะใหม่`, 
+                    'warning'
+                );
             }
 
             if (!myHoldTable) {
                 lockTable(tableId);
-            } else {
-                openPaymentModal();
             }
         }
 
         function lockTable(tableId) {
             const expiresAt = Date.now() + 10 * 60 * 1000;
             myHoldTable = tableId;
-            bookings[tableId] = { status: 'pending', expiresAt: expiresAt };
 
             renderMap();
             showHoldBanner(tableId, expiresAt);
@@ -451,6 +488,7 @@
             if (!myHoldTable) return;
             const tableId = myHoldTable;
             myHoldTable = null;
+            
             delete bookings[tableId];
             if (holdTimerInterval) clearInterval(holdTimerInterval);
 
@@ -458,13 +496,60 @@
             renderMap();
             syncWithBackend('cancel', { tableId });
 
-            if (autoExpired) Swal.fire('หมดเวลาการล็อคโต๊ะ', 'พ้นเวลา 10 นาทีแล้ว ระบบได้คืนสถานะโต๊ะให้ผู้อื่นจองแล้ว', 'info');
+            if (autoExpired) {
+                Swal.fire('หมดเวลาการล็อคโต๊ะ', 'พ้นเวลา 10 นาทีแล้ว ระบบได้คืนสถานะโต๊ะให้ว่างแล้ว', 'info');
+            } else {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'info',
+                    title: `ยกเลิกการเลือกโต๊ะ ${tableId} เรียบร้อยแล้ว`,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
         }
 
         function openPaymentModal() {
             if (!myHoldTable) return;
             document.getElementById('payTableId').textContent = myHoldTable;
             document.getElementById('paymentModal').classList.remove('hidden');
+        }
+
+        // ฟังก์ชั่นบีบอัดรูปภาพฝั่ง Client ก่อนส่งไปยัง Google Drive
+        function compressImage(file, callback) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    const max_size = 1000; // จำกัดขนาดพิกเซลไม่เกิน 1000px
+
+                    if (width > height) {
+                        if (width > max_size) {
+                            height *= max_size / width;
+                            width = max_size;
+                        }
+                    } else {
+                        if (height > max_size) {
+                            width *= max_size / height;
+                            height = max_size;
+                        }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // บีบอัดคุณภาพรูป JPEG 70%
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                    callback(dataUrl);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
 
         function submitSlip(e) {
@@ -475,21 +560,38 @@
             const student = document.getElementById('custStudent').value;
 
             const slipInput = document.getElementById('custSlip');
-            let slipUrl = "";
-            if (slipInput.files && slipInput.files[0]) {
-                slipUrl = URL.createObjectURL(slipInput.files[0]);
+            if (!slipInput.files || !slipInput.files[0]) {
+                return Swal.fire('Error', 'กรุณาแนบสลิปการโอนเงิน', 'error');
             }
 
-            bookings[tableId] = { status: 'pending', name, phone, student, slipUrl, timestamp: new Date().toISOString() };
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> กำลังส่งหลักฐาน...`;
 
-            myHoldTable = null;
-            if (holdTimerInterval) clearInterval(holdTimerInterval);
-            document.getElementById('holdBanner').classList.add('hidden');
-            closeModal('paymentModal');
-            renderMap();
+            compressImage(slipInput.files[0], function(compressedBase64) {
+                bookings[tableId] = { 
+                    tableId: tableId,
+                    status: 'pending', 
+                    name: name, 
+                    phone: phone, 
+                    student: student, 
+                    slipUrl: compressedBase64, 
+                    timestamp: new Date().toISOString() 
+                };
 
-            syncWithBackend('submit_slip', { tableId, name, phone, student, slipUrl });
-            Swal.fire('ส่งสลิปสำเร็จ!', 'ระบบได้รับข้อมูลแล้ว กรุณารอแอดมินตรวจสอบและกดยืนยันการจอง', 'success');
+                myHoldTable = null;
+                if (holdTimerInterval) clearInterval(holdTimerInterval);
+                document.getElementById('holdBanner').classList.add('hidden');
+                closeModal('paymentModal');
+                renderMap();
+
+                // ส่งไปให้ Google Apps Script เซฟลง Google Drive
+                syncWithBackend('submit_slip', { tableId, name, phone, student, slipBase64: compressedBase64 });
+                
+                btn.disabled = false;
+                btn.innerHTML = `<span>ยืนยันส่งหลักฐานการโอนเงิน</span>`;
+                Swal.fire('ส่งสลิปสำเร็จ!', 'ระบบบันทึกข้อมูลและแสดงสถานะสีส้ม (รอแอดมินตรวจสอบ) เรียบร้อยแล้ว', 'success');
+            });
         }
 
         function toggleAdminModal() {
@@ -517,7 +619,7 @@
             document.getElementById('adminLoginView').classList.remove('hidden');
             document.getElementById('adminDashboardView').classList.add('hidden');
             document.getElementById('adminUser').value = '';
-            document.getElementById('adminPass').value = '**************';
+            document.getElementById('adminPass').value = '';
         }
 
         function handleSystemToggle(isOpen) {
@@ -575,7 +677,9 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 
-                let slipBtn = b.slipUrl ? `<button onclick="viewSlip('${b.slipUrl}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1 rounded-lg text-[11px] font-medium shadow-sm flex items-center gap-1 mx-auto"><i class="fa-solid fa-image"></i> ดูสลิป</button>` : `<span class="text-slate-400 text-[11px]">ยังไม่แนบสลิป</span>`;
+                let slipBtn = b.slipUrl 
+                    ? `<button onclick="viewSlip('${b.slipUrl}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1 rounded-lg text-[11px] font-medium shadow-sm flex items-center gap-1 mx-auto"><i class="fa-solid fa-image"></i> ดูสลิป</button>` 
+                    : `<span class="text-slate-400 text-[11px]">ยังไม่แนบสลิป</span>`;
                 
                 let isConfirmed = (b.status === 'confirmed');
                 let statusBadge = isConfirmed 
@@ -600,6 +704,7 @@
             });
         }
 
+        // แสดงรูปภาพสลิปขนาดใหญ่ด้วย SweetAlert2
         function viewSlip(url) {
             Swal.fire({
                 title: 'หลักฐานการโอนเงิน (สลิป)',
@@ -608,9 +713,7 @@
                 imageAlt: 'Slip Image',
                 showCloseButton: true,
                 confirmButtonText: 'ปิดหน้าต่าง',
-                customClass: {
-                    image: 'rounded-xl shadow-md max-h-[70vh] object-contain'
-                }
+                customClass: { image: 'rounded-xl shadow-md max-h-[70vh] object-contain' }
             });
         }
 
@@ -618,7 +721,7 @@
             const { value: adminName } = await Swal.fire({
                 title: `ยืนยันโต๊ะ ${tableId}`,
                 input: 'text',
-                inputLabel: 'ระบุชื่อหรือนามแฝงผู้กดยืนยัน (เช่น ครูบอล, แอดมิน)',
+                inputLabel: 'ระบุชื่อผู้กดยืนยัน (เช่น ครูบอล, แอดมิน)',
                 inputPlaceholder: 'ใส่ชื่อของคุณที่นี่...',
                 showCancelButton: true,
                 confirmButtonText: 'ยืนยันการจอง',
