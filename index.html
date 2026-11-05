@@ -197,8 +197,7 @@
                         <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
                             <i class="fa-solid fa-gauge-high text-indigo-600"></i> แผงควบคุมแอดมิน (Dashboard)
                         </h3>
-                        <!-- ซ่อนข้อความ User รายละเอียด แต่แสดงสถานะความปลอดภัยแบบเรียบร้อย -->
-                        <p class="text-xs text-slate-500 mt-0.5">สถานะระบบ: <span class="text-emerald-600 font-semibold"><i class="fa-solid fa-lock text-[10px]"></i> ปลอดภัย (Encrypted Session)</span></p>
+                        <p class="text-xs text-slate-500 mt-0.5">สถานะระบบ: <span class="text-emerald-600 font-semibold"><i class="fa-solid fa-lock text-[10px]"></i> ปลับปลอดภัย (Encrypted Session)</span></p>
                     </div>
                     <div class="flex items-center gap-2">
                         <button onclick="openChangePassModal()" class="bg-amber-500 hover:bg-amber-600 text-white text-xs px-3.5 py-2 rounded-xl font-bold transition shadow-sm">
@@ -246,7 +245,9 @@
 
     <!-- Application JavaScript Logic -->
     <script>
-        let gasUrl = localStorage.getItem('JOSEPH_GAS_URL') || '';
+        // ⚡ ฝัง Google Apps Script Web App URL ของมาสเซอร์เรียบร้อยแล้ว
+        let gasUrl = localStorage.getItem('JOSEPH_GAS_URL') || "https://script.google.com/macros/s/AKfycby9rT-zn1YIwhE3-c2str9IDqJeTP6F3pvF1JDvPbu9Ub14M4roW2Blo09Bvz-WpeufPg/exec";
+        
         let validUser = "adminjsut";
         let validPass = "551407adminjsut";
 
@@ -455,9 +456,8 @@
         function logoutAdmin() {
             document.getElementById('adminLoginView').classList.remove('hidden');
             document.getElementById('adminDashboardView').classList.add('hidden');
-            // เคลียร์ค่าในช่อง password ให้เป็น **************
             document.getElementById('adminUser').value = '';
-            document.getElementById('adminPass').value = '';
+            document.getElementById('adminPass').value = '**************';
         }
 
         function saveGasUrlFromAdmin() {
@@ -483,7 +483,6 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 
-                // แก้ไขให้ปุ่มดูสลิปสามารถกดเปิดภาพดูได้เต็มจอ
                 let slipBtn = b.slipUrl ? `<button onclick="viewSlip('${b.slipUrl}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1 rounded-lg text-[11px] font-medium shadow-sm"><i class="fa-solid fa-image"></i> เปิดดูสลิป</button>` : `<span class="text-slate-400 text-[11px]">ยังไม่แนบสลิป</span>`;
                 
                 let isConfirmed = (b.status === 'confirmed');
@@ -502,14 +501,13 @@
                     <td class="p-3 text-right space-x-1">
                         <button onclick="adminEditTable('${tId}')" class="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 rounded-lg text-[11px] font-semibold shadow-sm" title="แก้ไขข้อมูล"><i class="fa-solid fa-pen-to-square"></i></button>
                         ${!isConfirmed ? `<button onclick="adminConfirmTable('${tId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-1 rounded-lg text-[11px] font-semibold shadow-sm"><i class="fa-solid fa-check mr-0.5"></i> ยืนยัน</button>` : `<span class="text-xs text-emerald-600 font-bold px-2 py-1"><i class="fa-solid fa-circle-check"></i> เรียบร้อย</span>`}
-                        <button onclick="adminCancelTable('${tId}')" class="bg-rose-500 hover:bg-rose-600 text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold shadow-sm"><i class="fa-solid fa-xmark mr-0.5"></i> ยกเลิก</button>
+                        <button onclick="adminCancelTable('${tId}')" class="bg-rose-500 hover:bg-rose-600 text-white px-2 py-1 rounded-lg text-[11px] font-semibold shadow-sm"><i class="fa-solid fa-xmark mr-0.5"></i> ยกเลิก</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        // ฟังก์ชันเปิดดูสลิปภาพเต็มจอด้วย SweetAlert2
         function viewSlip(url) {
             Swal.fire({
                 title: 'หลักฐานการโอนเงิน (สลิป)',
@@ -524,7 +522,6 @@
             });
         }
 
-        // เมื่อกดยืนยัน ให้มีช่องพิมพ์ชื่อผู้กดยืนยัน
         async function adminConfirmTable(tableId) {
             const { value: adminName } = await Swal.fire({
                 title: `ยืนยันโต๊ะ ${tableId}`,
@@ -535,9 +532,7 @@
                 confirmButtonText: 'ยืนยันการจอง',
                 cancelButtonText: 'ยกเลิก',
                 inputValidator: (value) => {
-                    if (!value) {
-                        return 'กรุณากรอกชื่อผู้กดยืนยันก่อนครับ!'
-                    }
+                    if (!value) return 'กรุณากรอกชื่อผู้กดยืนยันก่อนครับ!'
                 }
             });
 
@@ -553,7 +548,6 @@
             }
         }
 
-        // ฟังก์ชันแก้ไขข้อมูล (ชื่อ, เบอร์, นักเรียน)
         async function adminEditTable(tableId) {
             const b = bookings[tableId] || {};
             const { value: formValues } = await Swal.fire({
