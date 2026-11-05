@@ -6,7 +6,7 @@
     <title>ระบบจองโต๊ะงาน Joseph's Family Night 2026</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome -->
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -30,7 +30,8 @@
         .seat-available { background-color: #ffffff; color: #1e293b; border-color: #cbd5e1; }
         .seat-available:hover { background-color: #3b82f6; color: white; border-color: #2563eb; transform: scale(1.1); z-index: 10; }
         .seat-locked { background-color: #f97316; color: white; cursor: not-allowed; animation: pulse 2s infinite; }
-        .seat-confirmed { background-color: #15803d; color: white; cursor: not-allowed; font-weight: 700; }
+        .seat-confirmed { background-color: #15803d; color: white; cursor: pointer; font-weight: 700; }
+        .seat-confirmed:hover { transform: scale(1.1); z-index: 10; background-color: #166534; }
         .seat-my-lock { background-color: #eab308; color: white; border: 2px solid #ca8a04; }
         .seat-vip { background-color: #15803d; color: white; cursor: not-allowed; font-weight: 700; border: 2px solid #166534; }
         .aisle { width: 32px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #64748b; writing-mode: vertical-lr; transform: rotate(180deg); }
@@ -112,7 +113,7 @@
             <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-white border border-slate-400 shadow-sm"></span> ว่าง</div>
             <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-amber-500 shadow-sm"></span> กำลังกดจอง (คุณ)</div>
             <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-orange-500 shadow-sm"></span> รอแอดมินตรวจสอบ</div>
-            <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-emerald-600 shadow-sm"></span> จองสำเร็จ (ยืนยันแล้ว)</div>
+            <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-emerald-600 shadow-sm"></span> จองสำเร็จ (คลิกดูรายละเอียดได้)</div>
             <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-emerald-800 shadow-sm"></span> VIP (สงวนสิทธิ์)</div>
         </div>
 
@@ -165,7 +166,7 @@
         </div>
     </div>
 
-    <!-- Modal: Admin Login & Dashboard -->
+    <!-- Modal: Admin Login & Dashboard (ปรับปรุง UI สวยงาม + มีระบบเปิดปิดจอง) -->
     <div id="adminModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-5xl w-full p-6 md:p-8 shadow-2xl relative max-h-[92vh] flex flex-col border border-slate-100">
             <button onclick="closeModal('adminModal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 font-bold text-lg w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center transition">✕</button>
@@ -179,14 +180,16 @@
                 </div>
                 <form onsubmit="handleAdminLogin(event)" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Username</label>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1"><i class="fa-solid fa-user text-indigo-600 mr-1"></i> Username</label>
                         <input type="text" id="adminUser" placeholder="Username" required class="w-full text-sm px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1"><i class="fa-solid fa-key text-indigo-600 mr-1"></i> Password</label>
                         <input type="password" id="adminPass" placeholder="Password" required class="w-full text-sm px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </div>
-                    <button type="submit" class="w-full bg-indigo-900 text-white py-3 rounded-xl text-sm font-bold hover:bg-indigo-950 transition shadow-lg shadow-indigo-900/20">เข้าสู่ระบบ</button>
+                    <button type="submit" class="w-full bg-indigo-900 text-white py-3 rounded-xl text-sm font-bold hover:bg-indigo-950 transition shadow-lg shadow-indigo-900/20 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ
+                    </button>
                 </form>
             </div>
 
@@ -195,15 +198,26 @@
                 <div class="flex flex-wrap justify-between items-center border-b border-slate-100 pb-4 gap-3">
                     <div>
                         <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-                            <i class="fa-solid fa-gauge-high text-indigo-600"></i> แผงควบคุมแอดมิน (Dashboard)
+                            <i class="fa-solid fa-sliders text-indigo-600"></i> แผงควบคุมแอดมิน (Dashboard)
                         </h3>
-                        <p class="text-xs text-slate-500 mt-0.5">สถานะระบบ: <span class="text-emerald-600 font-semibold"><i class="fa-solid fa-lock text-[10px]"></i> ปลับปลอดภัย (Encrypted Session)</span></p>
+                        <p class="text-xs text-slate-500 mt-0.5">สถานะระบบ: <span class="text-emerald-600 font-semibold"><i class="fa-solid fa-shield-check text-[10px]"></i> ปลอดภัย (Encrypted Session)</span></p>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button onclick="openChangePassModal()" class="bg-amber-500 hover:bg-amber-600 text-white text-xs px-3.5 py-2 rounded-xl font-bold transition shadow-sm">
-                            <i class="fa-solid fa-key mr-1"></i> เปลี่ยนรหัสผ่าน
+                    <div class="flex items-center gap-3">
+                        <!-- สวิตช์เปิด-ปิดระบบการจอง -->
+                        <div class="flex items-center gap-2 bg-slate-100 px-3.5 py-1.5 rounded-2xl border border-slate-200">
+                            <i id="toggleIcon" class="fa-solid fa-door-open text-emerald-600"></i>
+                            <span class="text-xs font-bold text-slate-700" id="toggleLabel">เปิดการจอง</span>
+                            <label class="relative inline-flex items-center cursor-pointer ml-1">
+                                <input type="checkbox" id="systemToggleBtn" class="sr-only peer" onchange="handleSystemToggle(this.checked)" checked>
+                                <div class="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                            </label>
+                        </div>
+                        <button onclick="openChangePassModal()" class="bg-amber-500 hover:bg-amber-600 text-white text-xs px-3.5 py-2 rounded-xl font-bold transition shadow-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-key"></i> เปลี่ยนรหัสผ่าน
                         </button>
-                        <button onclick="logoutAdmin()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs px-3.5 py-2 rounded-xl font-semibold transition">ออกจากระบบ</button>
+                        <button onclick="logoutAdmin()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs px-3.5 py-2 rounded-xl font-semibold transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ
+                        </button>
                     </div>
                 </div>
 
@@ -214,8 +228,8 @@
                     </label>
                     <div class="flex gap-2">
                         <input type="text" id="gasUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full text-xs px-3.5 py-2.5 bg-white border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono">
-                        <button onclick="saveGasUrlFromAdmin()" class="bg-indigo-900 hover:bg-indigo-950 text-white text-xs px-5 py-2.5 rounded-xl font-bold shrink-0 transition shadow">
-                            <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึก URL
+                        <button onclick="saveGasUrlFromAdmin()" class="bg-indigo-900 hover:bg-indigo-950 text-white text-xs px-5 py-2.5 rounded-xl font-bold shrink-0 transition shadow flex items-center gap-1.5">
+                            <i class="fa-solid fa-floppy-disk"></i> บันทึก URL
                         </button>
                     </div>
                 </div>
@@ -225,14 +239,14 @@
                     <table class="w-full text-left border-collapse text-xs">
                         <thead class="bg-slate-100 text-slate-700 sticky top-0 border-b border-slate-200 uppercase tracking-wider font-semibold">
                             <tr>
-                                <th class="p-3">โต๊ะ</th>
-                                <th class="p-3">ผู้จอง</th>
-                                <th class="p-3">เบอร์โทร</th>
-                                <th class="p-3">นักเรียน</th>
-                                <th class="p-3">สถานะ</th>
-                                <th class="p-3">ผู้อนุมัติ</th>
-                                <th class="p-3 text-center">สลิปโอนเงิน</th>
-                                <th class="p-3 text-right">การจัดการ</th>
+                                <th class="p-3"><i class="fa-solid fa-chair text-indigo-600 mr-1"></i> โต๊ะ</th>
+                                <th class="p-3"><i class="fa-solid fa-user text-indigo-600 mr-1"></i> ผู้จอง</th>
+                                <th class="p-3"><i class="fa-solid fa-phone text-indigo-600 mr-1"></i> เบอร์โทร</th>
+                                <th class="p-3"><i class="fa-solid fa-graduation-cap text-indigo-600 mr-1"></i> นักเรียน</th>
+                                <th class="p-3"><i class="fa-solid fa-circle-info text-indigo-600 mr-1"></i> สถานะ</th>
+                                <th class="p-3"><i class="fa-solid fa-user-check text-indigo-600 mr-1"></i> ผู้อนุมัติ</th>
+                                <th class="p-3 text-center"><i class="fa-solid fa-receipt text-indigo-600 mr-1"></i> สลิปโอนเงิน</th>
+                                <th class="p-3 text-right"><i class="fa-solid fa-gear text-indigo-600 mr-1"></i> การจัดการ</th>
                             </tr>
                         </thead>
                         <tbody id="adminBookingTable" class="divide-y divide-slate-200 bg-white">
@@ -245,7 +259,6 @@
 
     <!-- Application JavaScript Logic -->
     <script>
-        // ⚡ ฝัง Google Apps Script Web App URL ของมาสเซอร์เรียบร้อยแล้ว
         let gasUrl = localStorage.getItem('JOSEPH_GAS_URL') || "https://script.google.com/macros/s/AKfycby9rT-zn1YIwhE3-c2str9IDqJeTP6F3pvF1JDvPbu9Ub14M4roW2Blo09Bvz-WpeufPg/exec";
         
         let validUser = "adminjsut";
@@ -350,12 +363,57 @@
         }
 
         function handleSeatClick(tableId) {
-            if (!systemOpen) return Swal.fire('ระบบปิดจอง', 'ขณะนี้ระบบปิดรับการจองโต๊ะชั่วคราว', 'warning');
-            if (myHoldTable && myHoldTable !== tableId) return Swal.fire('คุณมีการล็อคโต๊ะอยู่แล้ว', `กรุณายกเลิกการล็อคโต๊ะ ${myHoldTable} ก่อนที่จะเลือกโต๊ะใหม่`, 'warning');
-
             const data = bookings[tableId];
-            if (data && data.status === 'confirmed') return Swal.fire('โต๊ะถูกจองแล้ว', 'โต๊ะนี้ได้รับการยืนยันการชำระเงินเรียบร้อยแล้ว', 'error');
-            if (data && data.status === 'pending' && myHoldTable !== tableId) return Swal.fire('โต๊ะไม่ว่าง', 'โต๊ะนี้กำลังถูกจองหรือรอตรวจสอบการชำระเงินอยู่', 'orange');
+
+            // 1. โต๊ะสีเขียว (ยืนยันแล้ว) กดดูรายละเอียดเล็กๆ
+            if (data && data.status === 'confirmed') {
+                return Swal.fire({
+                    title: `<span class="text-base text-emerald-800 font-bold"><i class="fa-solid fa-chair text-emerald-600 mr-1"></i> โต๊ะ ${tableId}</span>`,
+                    html: `
+                        <div class="text-left bg-emerald-50/70 p-3.5 rounded-2xl border border-emerald-100 text-xs space-y-2 mt-1">
+                            <div class="flex justify-between items-center border-b border-emerald-100 pb-1.5">
+                                <span class="text-slate-500 font-medium"><i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> สถานะ:</span>
+                                <span class="bg-emerald-600 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">จองสำเร็จแล้ว</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-emerald-100 pb-1.5">
+                                <span class="text-slate-500 font-medium"><i class="fa-solid fa-user text-indigo-500 mr-1"></i> ชื่อผู้จอง:</span>
+                                <span class="font-bold text-slate-800">${data.name || '-'}</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-emerald-100 pb-1.5">
+                                <span class="text-slate-500 font-medium"><i class="fa-solid fa-graduation-cap text-indigo-500 mr-1"></i> ชื่อนักเรียน/ชั้น:</span>
+                                <span class="font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100 text-[11px]">${data.student || '-'}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-500 font-medium"><i class="fa-solid fa-user-check text-slate-400 mr-1"></i> ผู้อนุมัติ:</span>
+                                <span class="text-slate-600 font-mono text-[10px]">${data.approvedBy || 'Admin'}</span>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: 'ปิดหน้าต่าง',
+                    confirmButtonColor: '#059669',
+                    customClass: {
+                        popup: 'rounded-3xl border border-slate-100 shadow-xl max-w-xs'
+                    }
+                });
+            }
+
+            // 2. ถ้าปิดการจอง
+            if (!systemOpen) return Swal.fire('ระบบปิดรับจอง', 'ขณะนี้ระบบปิดรับการจองโต๊ะชั่วคราว', 'warning');
+
+            // 3. โต๊ะสีส้ม (กำลังจอง)
+            if (data && data.status === 'pending' && myHoldTable !== tableId) {
+                return Swal.fire({
+                    icon: 'warning',
+                    title: `โต๊ะ ${tableId} ไม่ว่าง`,
+                    text: 'โต๊ะนี้กำลังมีผู้กดจองหรือรอตรวจสอบการชำระเงินอยู่ครับ',
+                    confirmButtonText: 'เข้าใจแล้ว',
+                    confirmButtonColor: '#f97316'
+                });
+            }
+
+            if (myHoldTable && myHoldTable !== tableId) {
+                return Swal.fire('คุณมีการล็อคโต๊ะอยู่แล้ว', `กรุณายกเลิกการล็อคโต๊ะ ${myHoldTable} ก่อนที่จะเลือกโต๊ะใหม่`, 'warning');
+            }
 
             if (!myHoldTable) {
                 lockTable(tableId);
@@ -447,6 +505,8 @@
                 document.getElementById('adminLoginView').classList.add('hidden');
                 document.getElementById('adminDashboardView').classList.remove('hidden');
                 document.getElementById('gasUrlInput').value = gasUrl;
+                document.getElementById('systemToggleBtn').checked = systemOpen;
+                updateToggleUI(systemOpen);
                 renderAdminTable();
             } else {
                 Swal.fire('เข้าสู่ระบบไม่สำเร็จ', 'Username หรือ Password ไม่ถูกต้อง', 'error');
@@ -458,6 +518,38 @@
             document.getElementById('adminDashboardView').classList.add('hidden');
             document.getElementById('adminUser').value = '';
             document.getElementById('adminPass').value = '**************';
+        }
+
+        function handleSystemToggle(isOpen) {
+            systemOpen = isOpen;
+            updateToggleUI(isOpen);
+            syncWithBackend('toggle_system', { isOpen: isOpen });
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: isOpen ? 'success' : 'warning',
+                title: isOpen ? 'เปิดรับการจองแล้ว' : 'ปิดรับการจองแล้ว',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        }
+
+        function updateToggleUI(isOpen) {
+            const badge = document.getElementById('systemStatusBadge');
+            const icon = document.getElementById('toggleIcon');
+            const label = document.getElementById('toggleLabel');
+
+            if (isOpen) {
+                badge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> เปิดรับจอง`;
+                if (icon) icon.className = "fa-solid fa-door-open text-emerald-600";
+                if (label) label.textContent = "เปิดการจอง";
+            } else {
+                badge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/40";
+                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-400"></span> ปิดรับจอง`;
+                if (icon) icon.className = "fa-solid fa-door-closed text-rose-600";
+                if (label) label.textContent = "ปิดการจอง";
+            }
         }
 
         function saveGasUrlFromAdmin() {
@@ -474,7 +566,7 @@
             
             const tableKeys = Object.keys(bookings);
             if(tableKeys.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">ยังไม่มีรายการจองโต๊ะในระบบ</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400"><i class="fa-solid fa-inbox text-2xl mb-1 block"></i> ยังไม่มีรายการจองโต๊ะในระบบ</td></tr>`;
                 return;
             }
 
@@ -483,7 +575,7 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 
-                let slipBtn = b.slipUrl ? `<button onclick="viewSlip('${b.slipUrl}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1 rounded-lg text-[11px] font-medium shadow-sm"><i class="fa-solid fa-image"></i> เปิดดูสลิป</button>` : `<span class="text-slate-400 text-[11px]">ยังไม่แนบสลิป</span>`;
+                let slipBtn = b.slipUrl ? `<button onclick="viewSlip('${b.slipUrl}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1 rounded-lg text-[11px] font-medium shadow-sm flex items-center gap-1 mx-auto"><i class="fa-solid fa-image"></i> ดูสลิป</button>` : `<span class="text-slate-400 text-[11px]">ยังไม่แนบสลิป</span>`;
                 
                 let isConfirmed = (b.status === 'confirmed');
                 let statusBadge = isConfirmed 
@@ -554,9 +646,9 @@
                 title: `แก้ไขข้อมูลโต๊ะ ${tableId}`,
                 html:
                     `<div class="text-left space-y-3 mt-2">` +
-                    `<div><label class="text-xs font-semibold text-slate-600 mb-1 block">ชื่อ-นามสกุล</label><input id="swal-name" class="w-full text-sm px-3 py-2 border rounded-xl" value="${b.name || ''}"></div>` +
-                    `<div><label class="text-xs font-semibold text-slate-600 mb-1 block">เบอร์โทรศัพท์</label><input id="swal-phone" class="w-full text-sm px-3 py-2 border rounded-xl" value="${b.phone || ''}"></div>` +
-                    `<div><label class="text-xs font-semibold text-slate-600 mb-1 block">ชื่อนักเรียน/ชั้น</label><input id="swal-student" class="w-full text-sm px-3 py-2 border rounded-xl" value="${b.student || ''}"></div>` +
+                    `<div><label class="text-xs font-semibold text-slate-600 mb-1 block"><i class="fa-solid fa-user text-indigo-500 mr-1"></i> ชื่อ-นามสกุล</label><input id="swal-name" class="w-full text-sm px-3 py-2 border rounded-xl" value="${b.name || ''}"></div>` +
+                    `<div><label class="text-xs font-semibold text-slate-600 mb-1 block"><i class="fa-solid fa-phone text-indigo-500 mr-1"></i> เบอร์โทรศัพท์</label><input id="swal-phone" class="w-full text-sm px-3 py-2 border rounded-xl" value="${b.phone || ''}"></div>` +
+                    `<div><label class="text-xs font-semibold text-slate-600 mb-1 block"><i class="fa-solid fa-graduation-cap text-indigo-500 mr-1"></i> ชื่อนักเรียน/ชั้น</label><input id="swal-student" class="w-full text-sm px-3 py-2 border rounded-xl" value="${b.student || ''}"></div>` +
                     `</div>`,
                 focusConfirm: false,
                 showCancelButton: true,
@@ -635,6 +727,10 @@
                 .then(r => r.json())
                 .then(res => {
                     if (res.status === 'success') {
+                        if (typeof res.systemOpen === 'boolean') {
+                            systemOpen = res.systemOpen;
+                            updateToggleUI(systemOpen);
+                        }
                         if (res.adminCredentials) {
                             validUser = res.adminCredentials.user;
                             validPass = res.adminCredentials.pass;
