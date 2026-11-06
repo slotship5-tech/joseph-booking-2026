@@ -39,6 +39,18 @@
 </head>
 <body class="min-h-screen flex flex-col text-slate-800">
 
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="fixed inset-0 bg-indigo-950 z-[100] flex flex-col items-center justify-center text-white transition-opacity duration-500">
+        <div class="bg-amber-400 p-4 rounded-2xl text-indigo-950 font-bold text-3xl shadow-xl mb-4 animate-bounce">
+            <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <h2 class="text-xl md:text-2xl font-bold tracking-tight mb-2">Joseph's Family Night 2026</h2>
+        <p class="text-xs text-indigo-300 mb-6">กำลังเชื่อมต่อฐานข้อมูลและโหลดสถานะโต๊ะล่าสุด...</p>
+        <div class="w-48 h-1.5 bg-indigo-900 rounded-full overflow-hidden">
+            <div class="bg-amber-400 h-full animate-[pulse_1s_infinite] w-full"></div>
+        </div>
+    </div>
+
     <!-- Header Navigation -->
     <header class="bg-indigo-950 text-white shadow-xl sticky top-0 z-50 border-b border-indigo-900">
         <div class="max-w-7xl mx-auto px-4 py-3.5 flex flex-wrap justify-between items-center gap-4">
@@ -97,31 +109,6 @@
     <!-- Main Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 flex flex-col gap-6">
 
-        <!-- สรุปจำนวนโต๊ะและข้อมูลการติดต่อโรงเรียน -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3.5">
-                <div class="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl shrink-0 border border-indigo-100"><i class="fa-solid fa-chair"></i></div>
-                <div>
-                    <div class="text-xs text-slate-500 font-medium">จำนวนโต๊ะทั้งหมด</div>
-                    <div class="text-lg font-bold text-slate-800">318 <span class="text-xs font-normal text-slate-500">โต๊ะ</span></div>
-                </div>
-            </div>
-            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3.5">
-                <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0 border border-emerald-100"><i class="fa-solid fa-circle-check"></i></div>
-                <div>
-                    <div class="text-xs text-slate-500 font-medium">จำนวนโต๊ะว่างคงเหลือ</div>
-                    <div id="availableCount" class="text-lg font-bold text-emerald-600">318 <span class="text-xs font-normal text-slate-500">โต๊ะ</span></div>
-                </div>
-            </div>
-            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3.5">
-                <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shrink-0 border border-amber-100"><i class="fa-solid fa-phone-volume"></i></div>
-                <div>
-                    <div class="text-xs text-slate-500 font-medium">สอบถามข้อมูลเพิ่มเติม</div>
-                    <div class="text-sm font-bold text-slate-800">035-551407 <span class="text-[11px] font-normal text-slate-500 block">โรงเรียนยอแซฟอุปถัมภ์อู่ทอง</span></div>
-                </div>
-            </div>
-        </div>
-
         <!-- Stage & Speaker Header -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 text-center">
             <div class="bg-gradient-to-r from-sky-100 via-indigo-50 to-sky-100 text-indigo-950 font-bold py-3 rounded-xl border border-sky-200 shadow-inner mb-3 text-base md:text-lg">
@@ -153,6 +140,32 @@
                 <div id="zoneRight" class="flex gap-2"></div>
             </div>
         </div>
+
+        <!-- สรุปจำนวนโต๊ะและข้อมูลการติดต่อ (อยู่ด้านล่างสุด) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl shrink-0 border border-indigo-100"><i class="fa-solid fa-chair"></i></div>
+                <div>
+                    <div class="text-xs text-slate-500 font-medium">จำนวนโต๊ะทั้งหมด</div>
+                    <div class="text-lg font-bold text-slate-800">318 <span class="text-xs font-normal text-slate-500">โต๊ะ</span></div>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0 border border-emerald-100"><i class="fa-solid fa-circle-check"></i></div>
+                <div>
+                    <div class="text-xs text-slate-500 font-medium">จำนวนโต๊ะว่างคงเหลือ</div>
+                    <div id="availableCount" class="text-lg font-bold text-emerald-600">318 <span class="text-xs font-normal text-slate-500">โต๊ะ</span></div>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shrink-0 border border-amber-100"><i class="fa-solid fa-phone-volume"></i></div>
+                <div>
+                    <div class="text-xs text-slate-500 font-medium">สอบถามข้อมูลเพิ่มเติม</div>
+                    <div class="text-sm font-bold text-slate-800">035-551407 <span class="text-[11px] font-normal text-slate-500 block">โรงเรียนยอแซฟอุปถัมภ์อู่ทอง</span></div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <!-- Modal: Payment & Slip Submission -->
@@ -175,15 +188,15 @@
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">เบอร์โทรศัพท์ติดต่อ *</label>
-                    <input type="tel" id="custPhone" required placeholder="0812345678" class="w-full text-sm px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <input type="text" id="custPhone" required placeholder="0812345678" class="w-full text-sm px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">ชื่อนักเรียน / ชั้นเรียน (ถ้ามี)</label>
                     <input type="text" id="custStudent" placeholder="เช่น ด.ช.ปัญญา ป.4/2" class="w-full text-sm px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">แนบสลิปการโอนเงิน *</label>
-                    <input type="file" id="custSlip" accept="image/*" required class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer border border-slate-200 rounded-xl p-1 bg-slate-50">
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">แนบสลิปการโอนเงิน (รองรับทุกไฟล์/นามสกุล) *</label>
+                    <input type="file" id="custSlip" accept="*" required class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer border border-slate-200 rounded-xl p-1 bg-slate-50">
                 </div>
                 <button type="submit" id="submitBtn" class="w-full bg-indigo-900 hover:bg-indigo-950 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-indigo-900/20 mt-2 flex justify-center items-center gap-2">
                     <span>ยืนยันส่งหลักฐานการโอนเงิน</span>
@@ -249,13 +262,10 @@
                 <!-- Google Apps Script URL Config -->
                 <div class="bg-indigo-50/70 p-4 rounded-2xl border border-indigo-100 flex flex-col gap-2 shadow-sm">
                     <label class="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
-                        <i class="fa-solid fa-link text-indigo-600"></i> Google Apps Script Web App URL:
+                        <i class="fa-solid fa-link text-indigo-600"></i> Google Apps Script Web App URL (ตั้งค่าอัตโนมัติแล้ว):
                     </label>
                     <div class="flex gap-2">
-                        <input type="text" id="gasUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full text-xs px-3.5 py-2.5 bg-white border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono">
-                        <button onclick="saveGasUrlFromAdmin()" class="bg-indigo-900 hover:bg-indigo-950 text-white text-xs px-5 py-2.5 rounded-xl font-bold shrink-0 transition shadow flex items-center gap-1.5">
-                            <i class="fa-solid fa-floppy-disk"></i> บันทึก URL
-                        </button>
+                        <input type="text" id="gasUrlInput" class="w-full text-xs px-3.5 py-2.5 bg-white border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono text-slate-600" readonly>
                     </div>
                 </div>
 
@@ -284,7 +294,7 @@
 
     <!-- Application JavaScript Logic -->
     <script>
-        let gasUrl = localStorage.getItem('JOSEPH_GAS_URL') || "https://script.google.com/macros/s/AKfycby9rT-zn1YIwhE3-c2str9IDqJeTP6F3pvF1JDvPbu9Ub14M4roW2Blo09Bvz-WpeufPg/exec";
+        let gasUrl = "https://script.google.com/macros/s/AKfycbx2hPLIR_pnRvjht4U_FpuGvrTMHUHecV701ORxa157vz7pIQ4wiXwvYRMHD1n_OXkOOQ/exec";
         
         let validUser = "adminjsut";
         let validPass = "551407adminjsut";
@@ -293,6 +303,7 @@
         let bookings = {};
         let myHoldTable = null;
         let holdTimerInterval = null;
+        let ignoringTableId = null;
 
         const colConfigs = [
             { col: 'A', rows: 20 }, { col: 'B', rows: 20 }, { col: 'C', rows: 20 },
@@ -306,8 +317,8 @@
         document.addEventListener("DOMContentLoaded", () => {
             renderMap();
             startLiveClock();
-            fetchBookings();
-            setInterval(fetchBookings, 3000);
+            fetchBookings(true);
+            setInterval(() => fetchBookings(false), 3000);
         });
 
         function startLiveClock() {
@@ -379,21 +390,20 @@
             el.className = 'seat';
 
             if (myHoldTable === tableId) {
-                el.classList.add('seat-my-lock'); // กระพริบสีส้ม
+                el.classList.add('seat-my-lock');
             } else if (data && data.status === 'confirmed') {
-                el.classList.add('seat-confirmed'); // สีเขียว
+                el.classList.add('seat-confirmed');
             } else if (data && data.status === 'pending') {
-                el.classList.add('seat-locked'); // สีส้มค้าง
+                el.classList.add('seat-locked');
             } else {
-                el.classList.add('seat-available'); // สีขาว
+                el.classList.add('seat-available');
             }
         }
 
         function updateAvailableCount() {
             const total = 318;
             const booked = Object.keys(bookings).filter(k => bookings[k] && (bookings[k].status === 'confirmed' || bookings[k].status === 'pending')).length;
-            const myHold = myHoldTable && !bookings[myHoldTable] ? 1 : 0;
-            const avail = Math.max(0, total - booked - myHold);
+            const avail = Math.max(0, total - booked);
             
             const countEl = document.getElementById('availableCount');
             if (countEl) countEl.innerHTML = `${avail} <span class="text-xs font-normal text-slate-500">โต๊ะ</span>`;
@@ -461,6 +471,7 @@
         }
 
         function lockTable(tableId) {
+            ignoringTableId = null;
             const expiresAt = Date.now() + 10 * 60 * 1000;
             myHoldTable = tableId;
 
@@ -487,6 +498,8 @@
         function cancelMyHold(autoExpired = false) {
             if (!myHoldTable) return;
             const tableId = myHoldTable;
+            
+            ignoringTableId = tableId;
             myHoldTable = null;
             
             delete bookings[tableId];
@@ -495,6 +508,8 @@
             document.getElementById('holdBanner').classList.add('hidden');
             renderMap();
             syncWithBackend('cancel', { tableId });
+
+            setTimeout(() => { ignoringTableId = null; }, 5000);
 
             if (autoExpired) {
                 Swal.fire('หมดเวลาการล็อคโต๊ะ', 'พ้นเวลา 10 นาทีแล้ว ระบบได้คืนสถานะโต๊ะให้ว่างแล้ว', 'info');
@@ -516,7 +531,6 @@
             document.getElementById('paymentModal').classList.remove('hidden');
         }
 
-        // ฟังก์ชั่นบีบอัดรูปภาพฝั่ง Client ก่อนส่งไปยัง Google Drive
         function compressImage(file, callback) {
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -525,7 +539,7 @@
                     const canvas = document.createElement('canvas');
                     let width = img.width;
                     let height = img.height;
-                    const max_size = 1000; // จำกัดขนาดพิกเซลไม่เกิน 1000px
+                    const max_size = 500;
 
                     if (width > height) {
                         if (width > max_size) {
@@ -543,9 +557,11 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
                     
-                    // บีบอัดคุณภาพรูป JPEG 70%
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.5);
                     callback(dataUrl);
+                };
+                img.onerror = function() {
+                    callback(e.target.result);
                 };
                 img.src = e.target.result;
             };
@@ -556,17 +572,20 @@
             e.preventDefault();
             const tableId = myHoldTable;
             const name = document.getElementById('custName').value;
-            const phone = document.getElementById('custPhone').value;
+            let phone = document.getElementById('custPhone').value.trim();
+            if (phone.length > 0 && !phone.startsWith('0')) {
+                phone = '0' + phone;
+            }
             const student = document.getElementById('custStudent').value;
 
             const slipInput = document.getElementById('custSlip');
             if (!slipInput.files || !slipInput.files[0]) {
-                return Swal.fire('Error', 'กรุณาแนบสลิปการโอนเงิน', 'error');
+                return Swal.fire('Error', 'กรุณาแนบไฟล์หลักฐานการโอนเงิน', 'error');
             }
 
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> กำลังส่งหลักฐาน...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> กำลังอัปโหลดไฟล์ไปยัง Drive...`;
 
             compressImage(slipInput.files[0], function(compressedBase64) {
                 bookings[tableId] = { 
@@ -585,17 +604,17 @@
                 closeModal('paymentModal');
                 renderMap();
 
-                // ส่งไปให้ Google Apps Script เซฟลง Google Drive
                 syncWithBackend('submit_slip', { tableId, name, phone, student, slipBase64: compressedBase64 });
                 
                 btn.disabled = false;
                 btn.innerHTML = `<span>ยืนยันส่งหลักฐานการโอนเงิน</span>`;
-                Swal.fire('ส่งสลิปสำเร็จ!', 'ระบบบันทึกข้อมูลและแสดงสถานะสีส้ม (รอแอดมินตรวจสอบ) เรียบร้อยแล้ว', 'success');
+                Swal.fire('ส่งสลิปสำเร็จ!', 'ระบบอัปโหลดสลิปและบันทึกข้อมูลเรียบร้อยแล้วครับ', 'success');
             });
         }
 
         function toggleAdminModal() {
             document.getElementById('adminModal').classList.remove('hidden');
+            document.getElementById('gasUrlInput').value = gasUrl;
         }
 
         function handleAdminLogin(e) {
@@ -654,14 +673,6 @@
             }
         }
 
-        function saveGasUrlFromAdmin() {
-            const val = document.getElementById('gasUrlInput').value.trim();
-            gasUrl = val;
-            localStorage.setItem('JOSEPH_GAS_URL', gasUrl);
-            Swal.fire('บันทึกสำเร็จ!', 'บันทึก Google Apps Script URL เรียบร้อยแล้ว', 'success');
-            fetchBookings();
-        }
-
         function renderAdminTable() {
             const tbody = document.getElementById('adminBookingTable');
             tbody.innerHTML = '';
@@ -677,8 +688,11 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 
-                let slipBtn = b.slipUrl 
-                    ? `<button onclick="viewSlip('${b.slipUrl}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1 rounded-lg text-[11px] font-medium shadow-sm flex items-center gap-1 mx-auto"><i class="fa-solid fa-image"></i> ดูสลิป</button>` 
+                const slipData = b.slipUrl || b.slipBase64 || "";
+                const hasSlip = slipData && String(slipData).trim().length > 5;
+                
+                let slipBtn = hasSlip
+                    ? `<button onclick="viewSlip('${tId}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1 rounded-lg text-[11px] font-medium shadow-sm flex items-center gap-1 mx-auto"><i class="fa-solid fa-image"></i> ดูสลิป</button>` 
                     : `<span class="text-slate-400 text-[11px]">ยังไม่แนบสลิป</span>`;
                 
                 let isConfirmed = (b.status === 'confirmed');
@@ -686,13 +700,20 @@
                     ? '<span class="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold text-[11px]"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> ยืนยันแล้ว</span>'
                     : '<span class="inline-flex items-center gap-1 bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold text-[11px]"><span class="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse"></span> รอตรวจสอบ</span>';
 
+                let displayPhone = b.phone ? String(b.phone).trim() : '-';
+                if (displayPhone !== '-' && !displayPhone.startsWith('0')) {
+                    displayPhone = '0' + displayPhone;
+                }
+
+                let approvedPerson = b.approvedBy ? String(b.approvedBy).trim() : '-';
+
                 tr.innerHTML = `
                     <td class="p-3 font-bold text-slate-900">${tId}</td>
                     <td class="p-3 font-medium text-slate-700">${b.name || '-'}</td>
-                    <td class="p-3 text-slate-600 font-mono">${b.phone || '-'}</td>
+                    <td class="p-3 text-slate-600 font-mono">${displayPhone}</td>
                     <td class="p-3 text-slate-600">${b.student || '-'}</td>
                     <td class="p-3">${statusBadge}</td>
-                    <td class="p-3 text-slate-500 font-semibold text-[11px]">${b.approvedBy || '-'}</td>
+                    <td class="p-3 text-slate-700 font-semibold text-[11px]">${approvedPerson}</td>
                     <td class="p-3 text-center">${slipBtn}</td>
                     <td class="p-3 text-right space-x-1">
                         <button onclick="adminEditTable('${tId}')" class="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 rounded-lg text-[11px] font-semibold shadow-sm" title="แก้ไขข้อมูล"><i class="fa-solid fa-pen-to-square"></i></button>
@@ -704,11 +725,15 @@
             });
         }
 
-        // แสดงรูปภาพสลิปขนาดใหญ่ด้วย SweetAlert2
-        function viewSlip(url) {
+        function viewSlip(tableId) {
+            const b = bookings[tableId];
+            const imageUrl = b ? (b.slipUrl || b.slipBase64) : null;
+            if (!b || !imageUrl) {
+                return Swal.fire('ไม่พบสลิป', 'ไม่มีหลักฐานการโอนเงินสำหรับโต๊ะนี้', 'error');
+            }
             Swal.fire({
-                title: 'หลักฐานการโอนเงิน (สลิป)',
-                imageUrl: url,
+                title: `หลักฐานการโอนเงิน โต๊ะ ${tableId}`,
+                imageUrl: imageUrl,
                 imageWidth: '100%',
                 imageAlt: 'Slip Image',
                 showCloseButton: true,
@@ -732,25 +757,32 @@
             });
 
             if (adminName) {
-                if (bookings[tableId]) {
-                    bookings[tableId].status = 'confirmed';
-                    bookings[tableId].approvedBy = adminName;
-                    renderMap();
-                    renderAdminTable();
-                    syncWithBackend('admin_confirm', { tableId, approvedBy: adminName });
-                    Swal.fire('สำเร็จ', `ยืนยันการจองโต๊ะ ${tableId} โดยคุณ "${adminName}" เรียบร้อยแล้ว`, 'success');
+                if (!bookings[tableId]) {
+                    bookings[tableId] = { tableId: tableId };
                 }
+                bookings[tableId].status = 'confirmed';
+                bookings[tableId].approvedBy = adminName.trim();
+                
+                renderMap();
+                renderAdminTable();
+                syncWithBackend('admin_confirm', { tableId: tableId, approvedBy: adminName.trim() });
+                Swal.fire('สำเร็จ', `ยืนยันการจองโต๊ะ ${tableId} โดยคุณ "${adminName}" เรียบร้อยแล้ว`, 'success');
             }
         }
 
         async function adminEditTable(tableId) {
             const b = bookings[tableId] || {};
+            let currentPhone = b.phone ? String(b.phone).trim() : '';
+            if (currentPhone.length > 0 && !currentPhone.startsWith('0')) {
+                currentPhone = '0' + currentPhone;
+            }
+
             const { value: formValues } = await Swal.fire({
                 title: `แก้ไขข้อมูลโต๊ะ ${tableId}`,
                 html:
                     `<div class="text-left space-y-3 mt-2">` +
                     `<div><label class="text-xs font-semibold text-slate-600 mb-1 block"><i class="fa-solid fa-user text-indigo-500 mr-1"></i> ชื่อ-นามสกุล</label><input id="swal-name" class="w-full text-sm px-3 py-2 border rounded-xl" value="${b.name || ''}"></div>` +
-                    `<div><label class="text-xs font-semibold text-slate-600 mb-1 block"><i class="fa-solid fa-phone text-indigo-500 mr-1"></i> เบอร์โทรศัพท์</label><input id="swal-phone" class="w-full text-sm px-3 py-2 border rounded-xl" value="${b.phone || ''}"></div>` +
+                    `<div><label class="text-xs font-semibold text-slate-600 mb-1 block"><i class="fa-solid fa-phone text-indigo-500 mr-1"></i> เบอร์โทรศัพท์</label><input id="swal-phone" class="w-full text-sm px-3 py-2 border rounded-xl font-mono" value="${currentPhone}"></div>` +
                     `<div><label class="text-xs font-semibold text-slate-600 mb-1 block"><i class="fa-solid fa-graduation-cap text-indigo-500 mr-1"></i> ชื่อนักเรียน/ชั้น</label><input id="swal-student" class="w-full text-sm px-3 py-2 border rounded-xl" value="${b.student || ''}"></div>` +
                     `</div>`,
                 focusConfirm: false,
@@ -824,7 +856,7 @@
             document.getElementById(id).classList.add('hidden');
         }
 
-        function fetchBookings() {
+        function fetchBookings(isInitial = false) {
             if (!gasUrl) return;
             fetch(gasUrl)
                 .then(r => r.json())
@@ -836,12 +868,12 @@
                         }
                         if (res.adminCredentials) {
                             validUser = res.adminCredentials.user;
-                            validPass = res.adminCredentials.pass;
+                            validPass = res.adminCredentials.pass || validPass;
                         }
                         if (Array.isArray(res.data)) {
                             res.data.forEach(item => {
-                                if (item.tableId !== myHoldTable) {
-                                    bookings[item.tableId] = item;
+                                if (item.tableId !== myHoldTable && item.tableId !== ignoringTableId) {
+                                    bookings[item.tableId] = Object.assign({}, bookings[item.tableId] || {}, item);
                                 }
                             });
                             renderMap();
@@ -850,7 +882,22 @@
                             }
                         }
                     }
-                }).catch(() => {});
+                    if (isInitial) {
+                        hideLoadingScreen();
+                    }
+                }).catch(() => {
+                    if (isInitial) {
+                        hideLoadingScreen();
+                    }
+                });
+        }
+
+        function hideLoadingScreen() {
+            const loader = document.getElementById('loadingScreen');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.remove(), 500);
+            }
         }
 
         function syncWithBackend(action, payload) {
