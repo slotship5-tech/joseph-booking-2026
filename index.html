@@ -80,6 +80,9 @@
 
             <!-- Action Buttons -->
             <div class="flex items-center gap-2">
+                <span id="adminActiveBadge" class="hidden bg-amber-500/20 text-amber-300 border border-amber-500/40 px-3 py-1.5 rounded-xl text-xs font-semibold items-center gap-1.5">
+                    <i class="fa-solid fa-crown text-amber-400"></i> แอดมิน (จองได้)
+                </span>
                 <button onclick="toggleAdminModal()" class="bg-indigo-800 hover:bg-indigo-700 text-white text-xs md:text-sm px-4 py-2 rounded-xl font-medium flex items-center gap-2 border border-indigo-600 transition shadow-md">
                     <i class="fa-solid fa-user-shield"></i> แอดมิน (Dashboard)
                 </button>
@@ -239,9 +242,9 @@
                         <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
                             <i class="fa-solid fa-sliders text-indigo-600"></i> แผงควบคุมแอดมิน (Dashboard)
                         </h3>
-                        <p class="text-xs text-slate-500 mt-0.5">สถานะระบบ: <span class="text-emerald-600 font-semibold"><i class="fa-solid fa-shield-check text-[10px]"></i> ปลอดภัย (Encrypted Session)</span></p>
+                        <p class="text-xs text-slate-500 mt-0.5">สถานะระบบ: <span class="text-emerald-600 font-semibold"><i class="fa-solid fa-shield-check text-[10px]"></i> ล็อกอินแล้ว (แอดมินสามารถจองโต๊ะได้แม้ระบบปิดอยู่)</span></p>
                     </div>
-                    <div class="flex items-center gap-3">
+                    <div class="flex flex-wrap items-center gap-2">
                         <div class="flex items-center gap-2 bg-slate-100 px-3.5 py-1.5 rounded-2xl border border-slate-200">
                             <i id="toggleIcon" class="fa-solid fa-door-open text-emerald-600"></i>
                             <span class="text-xs font-bold text-slate-700" id="toggleLabel">เปิดการจอง</span>
@@ -250,6 +253,9 @@
                                 <div class="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
                             </label>
                         </div>
+                        <button onclick="openAdminDirectBookModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3.5 py-2 rounded-xl font-bold transition shadow-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-plus-circle"></i> จองโต๊ะ (แอดมิน)
+                        </button>
                         <button onclick="openChangePassModal()" class="bg-amber-500 hover:bg-amber-600 text-white text-xs px-3.5 py-2 rounded-xl font-bold transition shadow-sm flex items-center gap-1.5">
                             <i class="fa-solid fa-key"></i> เปลี่ยนรหัสผ่าน
                         </button>
@@ -269,7 +275,7 @@
                     </div>
                 </div>
 
-                <!-- Bookings Table -->
+                <!-- Bookings Table (8 Columns) -->
                 <div class="flex-1 overflow-y-auto border border-slate-200 rounded-2xl shadow-inner bg-slate-50">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead class="bg-slate-100 text-slate-700 sticky top-0 border-b border-slate-200 uppercase tracking-wider font-semibold">
@@ -299,6 +305,7 @@
         let validUser = "adminjsut";
         let validPass = "551407adminjsut";
 
+        let isAdminLoggedIn = false;
         let systemOpen = true;
         let bookings = {};
         let myHoldTable = null;
@@ -441,7 +448,9 @@
                 });
             }
 
-            if (!systemOpen) return Swal.fire('ระบบปิดรับจอง', 'ขณะนี้ระบบปิดรับการจองโต๊ะชั่วคราว', 'warning');
+            if (!systemOpen && !isAdminLoggedIn) {
+                return Swal.fire('ระบบปิดรับจอง', 'ขณะนี้ระบบปิดรับการจองโต๊ะชั่วคราว', 'warning');
+            }
 
             if (data && data.status === 'pending') {
                 if (myHoldTable === tableId) {
@@ -466,7 +475,11 @@
             }
 
             if (!myHoldTable) {
-                lockTable(tableId);
+                if (isAdminLoggedIn) {
+                    openAdminDirectBookModal(tableId);
+                } else {
+                    lockTable(tableId);
+                }
             }
         }
 
@@ -615,6 +628,11 @@
         function toggleAdminModal() {
             document.getElementById('adminModal').classList.remove('hidden');
             document.getElementById('gasUrlInput').value = gasUrl;
+            if (isAdminLoggedIn) {
+                document.getElementById('adminLoginView').classList.add('hidden');
+                document.getElementById('adminDashboardView').classList.remove('hidden');
+                renderAdminTable();
+            }
         }
 
         function handleAdminLogin(e) {
@@ -623,6 +641,9 @@
             const p = document.getElementById('adminPass').value;
 
             if (u === validUser && p === validPass) {
+                isAdminLoggedIn = true;
+                document.getElementById('adminActiveBadge').classList.remove('hidden');
+                document.getElementById('adminActiveBadge').classList.add('inline-flex');
                 document.getElementById('adminLoginView').classList.add('hidden');
                 document.getElementById('adminDashboardView').classList.remove('hidden');
                 document.getElementById('gasUrlInput').value = gasUrl;
@@ -635,6 +656,9 @@
         }
 
         function logoutAdmin() {
+            isAdminLoggedIn = false;
+            document.getElementById('adminActiveBadge').classList.add('hidden');
+            document.getElementById('adminActiveBadge').classList.remove('inline-flex');
             document.getElementById('adminLoginView').classList.remove('hidden');
             document.getElementById('adminDashboardView').classList.add('hidden');
             document.getElementById('adminUser').value = '';
@@ -649,9 +673,9 @@
                 toast: true,
                 position: 'top-end',
                 icon: isOpen ? 'success' : 'warning',
-                title: isOpen ? 'เปิดรับการจองแล้ว' : 'ปิดรับการจองแล้ว',
+                title: isOpen ? 'เปิดรับการจองแล้ว' : 'ปิดรับการจองแล้ว (แอดมินยังจองได้)',
                 showConfirmButton: false,
-                timer: 2000
+                timer: 2500
             });
         }
 
@@ -670,6 +694,66 @@
                 badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-400"></span> ปิดรับจอง`;
                 if (icon) icon.className = "fa-solid fa-door-closed text-rose-600";
                 if (label) label.textContent = "ปิดการจอง";
+            }
+        }
+
+        async function openAdminDirectBookModal(preselectedTable = '') {
+            const { value: formValues } = await Swal.fire({
+                title: `<span class="text-lg font-bold text-indigo-950"><i class="fa-solid fa-chair text-emerald-600 mr-1"></i> จองโต๊ะสำหรับแอดมิน</span>`,
+                html:
+                    `<div class="text-left space-y-3 mt-2">` +
+                    `<div><label class="text-xs font-semibold text-slate-600 mb-1 block">หมายเลขโต๊ะ (เช่น A1, B5) *</label><input id="adm-table" class="w-full text-sm px-3 py-2 border rounded-xl font-bold uppercase" value="${preselectedTable}" placeholder="ระบุเลขโต๊ะ"></div>` +
+                    `<div><label class="text-xs font-semibold text-slate-600 mb-1 block">ชื่อ-นามสกุล ผู้จอง *</label><input id="adm-name" class="w-full text-sm px-3 py-2 border rounded-xl" placeholder="ระบุชื่อผู้จอง"></div>` +
+                    `<div><label class="text-xs font-semibold text-slate-600 mb-1 block">เบอร์โทรศัพท์ติดต่อ</label><input id="adm-phone" class="w-full text-sm px-3 py-2 border rounded-xl font-mono" placeholder="0812345678"></div>` +
+                    `<div><label class="text-xs font-semibold text-slate-600 mb-1 block">ชื่อนักเรียน / ชั้นเรียน</label><input id="adm-student" class="w-full text-sm px-3 py-2 border rounded-xl" placeholder="เช่น ด.ช.ปัญญา ป.4/2"></div>` +
+                    `<div><label class="text-xs font-semibold text-slate-600 mb-1 block">ชื่อผู้อนุมัติ / ผู้บันทึก *</label><input id="adm-approver" class="w-full text-sm px-3 py-2 border rounded-xl" placeholder="เช่น ครูบอล, แอดมิน"></div>` +
+                    `</div>`,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'ยืนยันการจองโต๊ะ',
+                confirmButtonColor: '#059669',
+                cancelButtonText: 'ยกเลิก',
+                preConfirm: () => {
+                    const tId = document.getElementById('adm-table').value.trim().toUpperCase();
+                    const name = document.getElementById('adm-name').value.trim();
+                    const approver = document.getElementById('adm-approver').value.trim();
+                    if (!tId || !name || !approver) {
+                        Swal.showValidationMessage('กรุณากรอกหมายเลขโต๊ะ ชื่อผู้จอง และชื่อผู้อนุมัติให้ครบครับ');
+                        return false;
+                    }
+                    if (bookings[tId] && bookings[tId].status === 'confirmed') {
+                        Swal.showValidationMessage(`โต๊ะ ${tId} มีผู้จองและยืนยันไปแล้วครับ`);
+                        return false;
+                    }
+                    let phone = document.getElementById('adm-phone').value.trim();
+                    if (phone.length > 0 && !phone.startsWith('0')) {
+                        phone = '0' + phone;
+                    }
+                    return {
+                        tableId: tId,
+                        name: name,
+                        phone: phone,
+                        student: document.getElementById('adm-student').value.trim(),
+                        approvedBy: approver
+                    };
+                }
+            });
+
+            if (formValues) {
+                bookings[formValues.tableId] = {
+                    tableId: formValues.tableId,
+                    status: 'confirmed',
+                    name: formValues.name,
+                    phone: formValues.phone,
+                    student: formValues.student,
+                    slipUrl: '',
+                    approvedBy: formValues.approvedBy,
+                    timestamp: new Date().toISOString()
+                };
+                renderMap();
+                renderAdminTable();
+                syncWithBackend('admin_book', formValues);
+                Swal.fire('จองสำเร็จ!', `ยืนยันโต๊ะ ${formValues.tableId} เรียบร้อยแล้ว`, 'success');
             }
         }
 
@@ -693,7 +777,7 @@
                 
                 let slipBtn = hasSlip
                     ? `<button onclick="viewSlip('${tId}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1 rounded-lg text-[11px] font-medium shadow-sm flex items-center gap-1 mx-auto"><i class="fa-solid fa-image"></i> ดูสลิป</button>` 
-                    : `<span class="text-slate-400 text-[11px]">ยังไม่แนบสลิป</span>`;
+                    : `<span class="text-slate-400 text-[11px]">-</span>`;
                 
                 let isConfirmed = (b.status === 'confirmed');
                 let statusBadge = isConfirmed 
@@ -871,9 +955,20 @@
                             validPass = res.adminCredentials.pass || validPass;
                         }
                         if (Array.isArray(res.data)) {
+                            const incomingIds = new Set(res.data.map(i => i.tableId));
+                            Object.keys(bookings).forEach(existingId => {
+                                if (!incomingIds.has(existingId) && existingId !== myHoldTable) {
+                                    delete bookings[existingId];
+                                }
+                            });
+
                             res.data.forEach(item => {
                                 if (item.tableId !== myHoldTable && item.tableId !== ignoringTableId) {
+                                    const oldApproved = bookings[item.tableId] ? bookings[item.tableId].approvedBy : "";
                                     bookings[item.tableId] = Object.assign({}, bookings[item.tableId] || {}, item);
+                                    if (!item.approvedBy && oldApproved) {
+                                        bookings[item.tableId].approvedBy = oldApproved;
+                                    }
                                 }
                             });
                             renderMap();
