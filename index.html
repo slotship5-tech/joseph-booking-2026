@@ -311,6 +311,7 @@
         let myHoldTable = null;
         let holdTimerInterval = null;
         let ignoringTableId = null;
+        let protectedTables = {}; // ป้องกัน fetchBookings ลบข้อมูลที่แอดมินเพิ่งบันทึก
 
         const colConfigs = [
             { col: 'A', rows: 20 }, { col: 'B', rows: 20 }, { col: 'C', rows: 20 },
@@ -601,6 +602,7 @@
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> กำลังอัปโหลดไฟล์ไปยัง Drive...`;
 
             compressImage(slipInput.files[0], function(compressedBase64) {
+                protectedTables[tableId] = Date.now() + 8000;
                 bookings[tableId] = { 
                     tableId: tableId,
                     status: 'pending', 
@@ -721,6 +723,10 @@
                         Swal.showValidationMessage('กรุณากรอกหมายเลขโต๊ะ ชื่อผู้จอง และชื่อผู้อนุมัติให้ครบครับ');
                         return false;
                     }
+                    if (!document.getElementById(`seat-${tId}`)) {
+                        Swal.showValidationMessage(`ไม่พบหมายเลขโต๊ะ ${tId} ในแผนผังครับ`);
+                        return false;
+                    }
                     if (bookings[tId] && bookings[tId].status === 'confirmed') {
                         Swal.showValidationMessage(`โต๊ะ ${tId} มีผู้จองและยืนยันไปแล้วครับ`);
                         return false;
@@ -740,6 +746,9 @@
             });
 
             if (formValues) {
+                // ล็อกข้อมูลโต๊ะนี้ไว้ชั่วคราว 10 วินาที เพื่อไม่ให้ fetchBookings ดึงค่าเก่ามาทับก่อน Google Sheets บันทึกเสร็จ
+                protectedTables[formValues.tableId] = Date.now() + 10000;
+                
                 bookings[formValues.tableId] = {
                     tableId: formValues.tableId,
                     status: 'confirmed',
@@ -750,6 +759,7 @@
                     approvedBy: formValues.approvedBy,
                     timestamp: new Date().toISOString()
                 };
+                
                 renderMap();
                 renderAdminTable();
                 syncWithBackend('admin_book', formValues);
@@ -841,6 +851,7 @@
             });
 
             if (adminName) {
+                protectedTables[tableId] = Date.now() + 8000;
                 if (!bookings[tableId]) {
                     bookings[tableId] = { tableId: tableId };
                 }
@@ -883,6 +894,7 @@
             });
 
             if (formValues) {
+                protectedTables[tableId] = Date.now() + 8000;
                 bookings[tableId].name = formValues.name;
                 bookings[tableId].phone = formValues.phone;
                 bookings[tableId].student = formValues.student;
@@ -927,10 +939,13 @@
                 cancelButtonText: 'ปิด'
             }).then((result) => {
                 if (result.isConfirmed) {
+                    ignoringTableId = tableId;
                     delete bookings[tableId];
+                    delete protectedTables[tableId];
                     renderMap();
                     renderAdminTable();
                     syncWithBackend('admin_cancel', { tableId });
+                    setTimeout(() => { ignoringTableId = null; }, 5000);
                     Swal.fire('ยกเลิกสำเร็จ', 'คืนสถานะโต๊ะเป็นว่างเรียบร้อยแล้ว', 'success');
                 }
             });
@@ -955,19 +970,25 @@
                             validPass = res.adminCredentials.pass || validPass;
                         }
                         if (Array.isArray(res.data)) {
-                            const incomingIds = new Set(res.data.map(i => i.tableId));
+                            const now = Date.now();
+                            const incomingIds = new Set(res.data.map(i => String(i.tableId).trim().toUpperCase()));
+                            
                             Object.keys(bookings).forEach(existingId => {
-                                if (!incomingIds.has(existingId) && existingId !== myHoldTable) {
+                                const isProtected = protectedTables[existingId] && now < protectedTables[existingId];
+                                if (!incomingIds.has(existingId) && existingId !== myHoldTable && !isProtected) {
                                     delete bookings[existingId];
                                 }
                             });
 
                             res.data.forEach(item => {
-                                if (item.tableId !== myHoldTable && item.tableId !== ignoringTableId) {
-                                    const oldApproved = bookings[item.tableId] ? bookings[item.tableId].approvedBy : "";
-                                    bookings[item.tableId] = Object.assign({}, bookings[item.tableId] || {}, item);
+                                const tId = String(item.tableId).trim().toUpperCase();
+                                const isProtected = protectedTables[tId] && now < protectedTables[tId];
+                                
+                                if (tId !== myHoldTable && tId !== ignoringTableId && !isProtected) {
+                                    const oldApproved = bookings[tId] ? bookings[tId].approvedBy : "";
+                                    bookings[tId] = Object.assign({}, bookings[tId] || {}, item, { tableId: tId });
                                     if (!item.approvedBy && oldApproved) {
-                                        bookings[item.tableId].approvedBy = oldApproved;
+                                        bookings[tId].approvedBy = oldApproved;
                                     }
                                 }
                             });
